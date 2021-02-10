@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require("cors");
+const mongoose = require('mongoose');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -41,6 +42,13 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+const mongoURL = "mongodb://ShardShareUser:seproject123@shardshare-shard-00-00.1a5qt.mongodb.net:27017,shardshare-shard-00-01.1a5qt.mongodb.net:27017,shardshare-shard-00-02.1a5qt.mongodb.net:27017/ShardShare?ssl=true&replicaSet=atlas-vfiwm5-shard-0&authSource=admin&retryWrites=true&w=majority";
+mongoose.connect(mongoURL, {useNewUrlParser:true, useUnifiedTopology:true}).then(()=>{
+  console.log("Succesfully Connected To Database...");
+}).catch((err)=>{
+  console.log(err);
 });
 
 module.exports = app;
