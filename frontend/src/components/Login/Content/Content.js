@@ -15,7 +15,7 @@ function Content() {
                         </h6>
                         <br />
                         <h6><a className="btn btn-dark start start-two" href="#">View Documentation</a></h6> <br />
-                        <h6><a className="btn btn-dark start start-two" href="#">GitHub <i class="fab fa-github"></i></a></h6> <br />
+                        <h6><a className="btn btn-dark start start-two" href="#">GitHub <i className="fab fa-github"></i></a></h6> <br />
                     </div>
                     <div className="col-sm-3 talk">
                     </div>

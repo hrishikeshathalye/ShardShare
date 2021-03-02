@@ -1,9 +1,12 @@
-var express = require('express');
+var express = require("express")
+var {signin, signup, verify} = require("../controllers/user.js")
 var router = express.Router();
+var auth = require("../middleware/auth")
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+router.post('/signin', signin)
+
+router.post('/signup', signup)
+
+router.post('/verify', auth, verify)
 
 module.exports = router;

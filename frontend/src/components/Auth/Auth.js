@@ -45,8 +45,7 @@ const SignUp = () => {
 
     try {
       dispatch({ type: AUTH, data: { result, token } });
-
-      history.push('/');
+      history.push('/dashboard');
     } catch (error) {
       console.log(error);
     }
