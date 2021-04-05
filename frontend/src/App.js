@@ -9,6 +9,8 @@ import CreateSecretForm from './components/create_secret/create_secret'
 import {Link, BrowserRouter, Switch, Route, useHistory} from 'react-router-dom'
 import Auth from './components/Auth/Auth';
 import Dashboard from './components/Dashboard/Dashboard';
+import SharedWithUser from './components/SharedWithUser/SharedWithUser';
+import RecoveryRequests from './components/RecoveryRequests/RecoveryRequests';
 import { useDispatch, useSelector } from 'react-redux';
 import { verify } from './api/index';
 
@@ -62,11 +64,13 @@ function App() {
         <Switch>
           <Route exact path="/" component={Home} /> 
           { isVerified ? 
-             <Route exact path="/dashboard" component={Dashboard}/>:
+            <Route exact path="/dashboard" component={Dashboard}/>:
             <Route exact path="/dashboard" component={Home} />
           }
           <Route exact path="/auth" component={Auth} />
           <Route exact path="/create_secret" component={CreateSecretForm} />
+          <Route exact path="/sharedwithyou" component={SharedWithUser} />
+          <Route exact path="/recoveryrequests" component={RecoveryRequests} />
         </Switch>
         </Grid>
         
