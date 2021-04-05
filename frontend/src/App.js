@@ -1,4 +1,4 @@
-import {React, useState, useEffect} from 'react';
+import { React, useState, useEffect } from "react";
 // import logo from './logo.svg';
 import './App.css';
 import { Container,Grid } from '@material-ui/core';
@@ -19,39 +19,40 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
- 
 }));
-const renderRoutes = (isVerified)=>{
-  if(isVerified)
-  return(
-    <Switch>
-    <Route exact path="/" component={Home} /> 
-    <Route exact path="/dashboard" component={Dashboard} />
-    <Route exact path="/create_context" component={CreateSecretForm} />
-    <Route exact path="/auth" component={Dashboard} />
-    </Switch>
-  )
+const renderRoutes = (isVerified) => {
+  if (isVerified)
+    return (
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route exact path="/dashboard" component={Dashboard} />
+        <Route exact path="/create_context" component={CreateSecretForm} />
+        <Route exact path="/auth" component={Dashboard} />
+      </Switch>
+    );
   else
-  return(
-    <Switch>
-    <Route exact path="/" component={Home} /> 
-    <Route exact path="/dashboard" component={Home} />
-    <Route exact path="/create_context" component={Home} />
-    <Route exact path="/auth" component={Home} />
-    </Switch>
-  ) 
-}
+    return (
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route exact path="/dashboard" component={Home} />
+        <Route exact path="/create_context" component={Home} />
+        <Route exact path="/auth" component={Home} />
+      </Switch>
+    );
+};
 function App() {
   const classes = useStyles();
-  let state = useSelector(state => state);
+  let state = useSelector((state) => state);
   const dispatch = useDispatch();
   let [isVerified, setVerified] = useState(null);
   useEffect(() => {
-    verify().then((res)=>{
-      setVerified(res.data.userId);
-    }).catch(()=>{
-      setVerified(null);
-    });
+    verify()
+      .then((res) => {
+        setVerified(res.data.userId);
+      })
+      .catch(() => {
+        setVerified(null);
+      });
   }, []);
   return (
     <BrowserRouter>
@@ -77,7 +78,7 @@ function App() {
         </Grid>
       </div>
     </BrowserRouter>
-  )
+  );
 }
 
 export default App;
