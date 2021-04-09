@@ -13,7 +13,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function RecoveryRequests(props) {
+export default function SharedWithUser(props) {
   const classes = useStyles();
 
   return (
@@ -26,7 +26,7 @@ export default function RecoveryRequests(props) {
         bgcolor="background.paper"
       >
         <Typography variant="h4" gutterBottom>
-          Request Recovery
+          Secrets shared by you.
         </Typography>
       </Box>
 
