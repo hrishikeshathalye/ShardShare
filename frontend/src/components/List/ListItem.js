@@ -12,23 +12,50 @@ import FolderIcon from "@material-ui/icons/Folder";
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
+import Typography from "@material-ui/core/Typography";
+import MouseOverPopover from "./PopOver";
+import PersonAddIcon from "@material-ui/icons/PersonAdd";
+import EventIcon from "@material-ui/icons/Event";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
   list: {
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: "#eeeeee",
   },
   title: {
     margin: theme.spacing(4, 0, 2),
   },
 }));
 
+const get_button_by_list_type = (type) => {
+  if (type === "shared_by_user") {
+    return (
+      <Button variant="outlined" color="primary" href="#outlined-buttons">
+        Modify
+      </Button>
+    );
+  }
+  if (type === "shared_with_user") {
+    return (
+      <Button variant="outlined" color="primary" href="#outlined-buttons">
+        Recover
+      </Button>
+    );
+  }
+};
+
 export default function InteractiveList(props) {
   const classes = useStyles();
   const [dense, setDense] = React.useState(false);
   const [secondary, setSecondary] = React.useState(false);
-
+  let participants = props.secret.sharedWith.map((ele, index) => {
+    return (
+      <ListItem>
+        <ListItemText primary={ele} />
+      </ListItem>
+    );
+  });
   return (
     <div className={classes.root}>
       <Grid container spacing={2}>
@@ -42,18 +69,29 @@ export default function InteractiveList(props) {
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText
-                  primary={props.secretName}
-                  secondary={secondary ? "Secondary text" : null}
+                  primary="Secret name"
+                  secondary={props.secret.secretName}
                 />
+
                 <ListItemSecondaryAction>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    href="#outlined-buttons"
-                  >
-                    Recover
-                  </Button>
+                  {get_button_by_list_type(props.list_for)}
                 </ListItemSecondaryAction>
+              </ListItem>
+              <ListItem>
+                <ListItemAvatar>
+                  <Avatar>
+                    <PersonAddIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <MouseOverPopover content={participants} />
+              </ListItem>
+              <ListItem>
+                <ListItemAvatar>
+                  <Avatar>
+                    <EventIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary="Date" secondary={props.secret.date} />
               </ListItem>
             </List>
           </div>

@@ -1,8 +1,7 @@
-
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import {Container} from '@material-ui/core'
-import ListItem from './ListItem'
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { Container } from "@material-ui/core";
+import ListItem from "./ListItem";
 const useStyles = makeStyles({
   root: {
     maxWidth: 345,
@@ -14,13 +13,8 @@ const useStyles = makeStyles({
 
 export default function List(props) {
   const classes = useStyles();
-  let listItems = props.listItems.map( (ele, index) => {
-    return <ListItem secretName={ele} key={index} buttonName={props.buttonName}/>
-  })
-  return (
-    <Container>
-        {listItems}
-    </Container>
-  );
+  let listItems = props.listItems.map((ele, index) => {
+    return <ListItem secret={ele} key={index} list_for={props.list_for} />;
+  });
+  return <Container>{listItems}</Container>;
 }
-

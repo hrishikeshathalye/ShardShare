@@ -1,22 +1,26 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API = axios.create({ baseURL: 'http://localhost:5000' });
+const API = axios.create({ baseURL: "http://localhost:5000" });
 
 API.interceptors.request.use((req) => {
-  if (localStorage.getItem('profile')) {
-    req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem('profile')).token}`;
+  if (localStorage.getItem("profile")) {
+    req.headers.Authorization = `Bearer ${
+      JSON.parse(localStorage.getItem("profile")).token
+    }`;
   }
 
   return req;
 });
 
 //Signin/Signup related endpoints
-export const signIn = (formData) => API.post('/user/signin', formData);
-export const signUp = (formData) => API.post('/user/signup', formData);
-export const verify = () => API.post('/user/verify');
+export const signIn = (formData) => API.post("/user/signin", formData);
+export const signUp = (formData) => API.post("/user/signup", formData);
+export const verify = () => API.post("/user/verify");
 
 //Secret related endpoints
-export const createSecret = (formData) => API.post('/secret/create', formData);
+export const createSecret = (formData) => API.post("/secret/create", formData);
+export const getSharedByUser = () => API.post("/secret/get_shared_by_user");
+export const getSharedWithUser = () => API.post("/secret/get_shared_with_user");
 // export const verify = () => API.post('/user/verify');
 
 //Recovery related endpoints
