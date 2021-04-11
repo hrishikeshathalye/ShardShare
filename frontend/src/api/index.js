@@ -24,6 +24,10 @@ export const getSharedWithUser = () => API.post("/secret/get_shared_with_user");
 // export const verify = () => API.post('/user/verify');
 
 //Recovery related endpoints
+export const recoverSecret = (secretId) => API.post("/recover/request/"+secretId);
+export const approveRequest = (secretId) => API.post("/recover/approve/"+secretId);
+export const rejectRequest = (secretId) => API.post("/recover/reject/"+secretId);
+export const getRecoveryRequests = ()=> API.post("/recover/getRecoveryRequests");
 // export const signIn = (formData) => API.post('/user/signin', formData);
 // export const signUp = (formData) => API.post('/user/signup', formData);
 // export const verify = () => API.post('/user/verify');

@@ -33,7 +33,7 @@ export default function SharedWithUser(props) {
         bgcolor="background.paper"
       >
         <Typography variant="h4" gutterBottom>
-          Secrets shared with you.
+          Secrets Shared With You
         </Typography>
       </Box>
 

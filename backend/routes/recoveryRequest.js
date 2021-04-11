@@ -1,12 +1,16 @@
-var express = require("express")
-var {signin, signup, verify} = require("../controllers/user.js")
+var express = require("express");
+var {
+  request,
+  approve,
+  reject,
+  getRecoveryRequests,
+} = require("../controllers/recoveryRequest.js");
 var router = express.Router();
-var auth = require("../middleware/auth")
+var auth = require("../middleware/auth");
 
-router.post('/signin', signin)
-
-router.post('/signup', signup)
-
-router.post('/verify', auth, verify)
+router.post("/request/:secretId", request);
+router.post("/approve/:secretId", approve);
+router.post("/reject/:secretId", reject);
+router.post("/getRecoveryRequests", getRecoveryRequests);
 
 module.exports = router;

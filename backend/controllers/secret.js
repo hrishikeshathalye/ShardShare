@@ -64,6 +64,8 @@ exports.create = async (req, res) => {
       owner: secretCreator,
       sharedWith: participants,
       secretName: secretName,
+      n: n,
+      k: k
     });
     secret = Buffer.from(secret);
     const shares = sss.split(secret, { shares: n, threshold: k });
@@ -95,7 +97,6 @@ exports.get_secrets_shared_by_user = async (req, res) => {
   const secretCreator = decodedData.email;
   //console.log(secretCreator);
   secrets = await Secret.find({ owner: secretCreator });
-  console.log(secrets);
   res.status(200).json({ secret_array: secrets });
 };
 
@@ -105,6 +106,5 @@ exports.get_secrets_shared_with_user = async (req, res) => {
   const secretCreator = decodedData.email;
   //console.log(secretCreator);
   secrets = await Secret.find({ sharedWith: secretCreator });
-  console.log(secrets);
   res.status(200).json({ secret_array: secrets });
 };

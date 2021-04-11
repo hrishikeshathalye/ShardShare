@@ -22,7 +22,7 @@ app.use(cookieParser());
 // app.use('/', indexRouter);
 app.use("/user", usersRouter);
 app.use("/secret", secretRouter);
-app.use("/request", requestRouter);
+app.use("/recover", requestRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

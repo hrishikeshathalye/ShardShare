@@ -2,6 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Container } from "@material-ui/core";
 import ListItem from "./ListItem";
+import { toast, ToastContainer } from "react-toastify";
 const useStyles = makeStyles({
   root: {
     maxWidth: 345,
@@ -16,5 +17,10 @@ export default function List(props) {
   let listItems = props.listItems.map((ele, index) => {
     return <ListItem secret={ele} key={index} list_for={props.list_for} />;
   });
-  return <Container>{listItems}</Container>;
+  return (
+    <Container>
+      <ToastContainer position="bottom-center" />
+      {listItems}
+    </Container>
+  );
 }

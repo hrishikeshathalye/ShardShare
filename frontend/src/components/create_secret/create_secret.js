@@ -18,9 +18,17 @@ export default function CreateSecretForm() {
   const classes = useStyles();
   return (
     <Container component="main" maxWidth="xs">
+      <Box
+        display="flex"
+        justifyContent="center"
+        m={1}
+        p={1}
+        bgcolor="background.paper"
+      >
       <Typography variant="h4" gutterBottom>
-        New Secret
+        Create New Secret
       </Typography>
+      </Box>
       <HorizontalLinearStepper />
     </Container>
   );

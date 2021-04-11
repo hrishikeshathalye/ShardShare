@@ -21,17 +21,17 @@ function Dashboard() {
             <Grid container justify = "center" spacing = {3}>
                 <Grid container item xs  >
                     <div className={classes.MasterCard}>
-                    <MasterCard title="Create new Secret" description = "Add new secret, shard it, and share!" image="/images/lock1.png" link = '/create_secret'/>
+                    <MasterCard title="Create New Secret" description = "Add new secret, shard it, and share!" image="/images/lock1.png" link = '/create_secret'/>
                     </div>
                 </Grid>
                 <Grid container item xs >
                 <div className={classes.MasterCard}>
-                    <MasterCard title="Your secrets" description = "Seccrets that you created and shared" image="/images/confidential.png" link = '/sharedbyyou'/>
+                    <MasterCard title="Your Secrets" description = "Seccrets that you created and shared" image="/images/confidential.png" link = '/sharedbyyou'/>
                     </div>
                 </Grid>
                 <Grid container item xs >
                 <div className={classes.MasterCard}>
-                    <MasterCard title="Secrets shared with you" description = "Secrets in which you are a participant" image="/images/key.png" link = '/sharedwithyou' />
+                    <MasterCard title="Secrets Shared With You" description = "Secrets in which you are a participant" image="/images/key.png" link = '/sharedwithyou' />
                     </div>
                 </Grid>
                 <Grid container item xs >
