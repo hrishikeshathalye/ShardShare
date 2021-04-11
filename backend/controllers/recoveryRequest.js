@@ -109,7 +109,7 @@ exports.getRecoveryRequests = async (req, res) => {
   const secretCreator = decodedData.email;
   let secrets = [];
   requests = await recoveryRequest.find({});
-  console.log(requests);
+  // console.log(requests);
   for (let i = 0; i < requests.length; i++) {
     var tmp = await Secret.find({
       _id: requests[i].secretId,
@@ -122,7 +122,8 @@ exports.getRecoveryRequests = async (req, res) => {
     if (numRejected > tmp.n - tmp.k) {
       await recoveryRequest.deleteOne({ _id: requests[i]._id });
     } else {
-      tmp["requester"] = requests[i].requester;
+      var requester = requests[i].requester;
+      tmp = { ...tmp._doc, requester };
       if (numAccepted >= tmp.k) {
         tmp["state"] = "accepted";
       } else {

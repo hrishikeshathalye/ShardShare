@@ -4,7 +4,7 @@ const sss = require("shamirs-secret-sharing");
 const nodemailer = require("nodemailer");
 var Secret = require("../models/secret.js");
 const { PromiseProvider } = require("mongoose");
-
+var recoveryRequest = require("../models/recoveryRequest.js");
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -65,7 +65,7 @@ exports.create = async (req, res) => {
       sharedWith: participants,
       secretName: secretName,
       n: n,
-      k: k
+      k: k,
     });
     secret = Buffer.from(secret);
     const shares = sss.split(secret, { shares: n, threshold: k });
@@ -101,10 +101,30 @@ exports.get_secrets_shared_by_user = async (req, res) => {
 };
 
 exports.get_secrets_shared_with_user = async (req, res) => {
+  var tmp;
   token = req.headers.authorization.split(" ")[1];
   decodedData = jwt.decode(token);
   const secretCreator = decodedData.email;
   //console.log(secretCreator);
+  all_secrets = [];
   secrets = await Secret.find({ sharedWith: secretCreator });
-  res.status(200).json({ secret_array: secrets });
+  for (var i = 0; i < secrets.length; i++) {
+    s_tmp = { ...secrets[i]._doc };
+    tmp = await recoveryRequest.find({ secretId: secrets[i]._id });
+    if (tmp.length === 0) {
+      console.log(tmp);
+      s_tmp["state"] = "noRequest";
+    } else {
+      tmp = tmp[0];
+      let numAccepted = tmp.approved.length;
+      if (numAccepted >= secrets[i].k) {
+        s_tmp["state"] = "accepted";
+      } else {
+        s_tmp["state"] = "pending";
+      }
+    }
+    // console.log(tmp);
+    all_secrets.push(s_tmp);
+  }
+  res.status(200).json({ secret_array: all_secrets });
 };

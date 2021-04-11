@@ -115,18 +115,6 @@ const get_button_by_list_type = (type, secret) => {
     );
   }
   if (type === "recovery_requests_reject") {
-    if (secret.state === "pending") {
-      return (
-        <Button
-          variant="outlined"
-          color="primary"
-          href="#outlined-buttons"
-          disabled
-        >
-          Request Pending
-        </Button>
-      );
-    }
     if (secret.state === "accepted") {
       return (
         <Button
@@ -151,18 +139,6 @@ const get_button_by_list_type = (type, secret) => {
     );
   }
   if (type === "recovery_requests_accept") {
-    if (secret.state === "pending") {
-      return (
-        <Button
-          variant="outlined"
-          color="primary"
-          href="#outlined-buttons"
-          disabled
-        >
-          Request Pending
-        </Button>
-      );
-    }
     if (secret.state === "accepted") {
       return (
         <Button
