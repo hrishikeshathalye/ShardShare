@@ -19,7 +19,7 @@ export default function SharedWithUser(props) {
   const [secrets, setSecrets] = useState([]);
   useEffect(() => {
     getSharedByUser().then((res) => {
-      //console.log(res.data);
+      //console.log(res.data.secret_array);
       setSecrets(res.data.secret_array);
     });
   }, []);

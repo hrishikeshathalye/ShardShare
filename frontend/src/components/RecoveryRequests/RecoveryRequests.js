@@ -15,11 +15,11 @@ const useStyles = makeStyles({
 });
 
 export default function RecoveryRequests(props) {
- const classes = useStyles();
+  const classes = useStyles();
   const [secrets, setSecrets] = useState([]);
   useEffect(() => {
     getRecoveryRequests().then((res) => {
-      //console.log(res.data);
+      console.log(res.data.secret_array);
       setSecrets(res.data.secret_array);
     });
   }, []);
