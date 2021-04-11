@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import List from '../List/List'
 const useStyles = makeStyles({
   root: {
     maxWidth: 345,
@@ -14,8 +15,7 @@ export default function SharedWithUser(props) {
   const classes = useStyles();
 
   return (
-    <div>
-    </div>
+    <List listItems={["A", "B", "C", "D"]} buttonName = {"Request Recovery"}/>
   );
 }
 

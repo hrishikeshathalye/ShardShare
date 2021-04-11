@@ -15,7 +15,7 @@ const useStyles = makeStyles({
 export default function List(props) {
   const classes = useStyles();
   let listItems = props.listItems.map( (ele, index) => {
-    return <ListItem secretName={ele} key={index}/>
+    return <ListItem secretName={ele} key={index} buttonName={props.buttonName}/>
   })
   return (
     <Container>

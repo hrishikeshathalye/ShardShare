@@ -11,11 +11,11 @@ const useStyles = makeStyles({
   },
 });
 
-export default function RecoveryRequests(props) {
+export default function SharedByUser(props) {
   const classes = useStyles();
 
   return (
-    <List listItems={["A", "B", "C", "D"]} buttonName = {"Share Shard"}/>
+    <List listItems={["A", "B", "C", "D"]} buttonName = {"Reshare"}/>
   );
 }
 

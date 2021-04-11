@@ -8,12 +8,19 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import { Box, Container } from "@material-ui/core";
+import { trackPromise } from 'react-promise-tracker';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import { createSecret } from '../../api/index';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
   },
   button: {
-    marginRight: theme.spacing(1),
+    marginTop:'1rem',
+    marginRight: theme.spacing(1)
   },
   instructions: {
     marginTop: theme.spacing(1),
@@ -33,18 +40,18 @@ function getSteps() {
 function getStepContent(step, handleChange) {
   if (Number(formData.n) != 0)
     formData.participants = Array(Number(formData.n)).fill("");
-  const part_textboxes = formData.participants.map((number) => (
+  const part_textboxes = formData.participants.map((number, index) => (
     <TextField
       variant="outlined"
       margin="normal"
       required
       fullWidth
-      name={"participant"}
-      label={"participant" + number.toString() + "'s email"}
-      id={"participant" + number.toString()}
-      onChange={handleChange}
+      name={"participants"}
+      label={"participant" + index.toString() + "'s email"}
+      id={"participant" + index.toString()}
+      onChange={(e)=>handleChange(e, index)}
       defaultValue={""}
-      key={number.toString()}
+      key={index.toString()}
     />
   ));
   switch (step) {
@@ -145,6 +152,15 @@ export default function HorizontalLinearStepper(props) {
     }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
+    if(activeStep == 3){
+      trackPromise(
+        createSecret(formData).then(res=>{
+          toast.success("Sending Emails Successful!")
+        }).catch(()=>{
+          toast.error("There was some error. Try again.")
+        })
+      );
+    }
   };
 
   const handleBack = () => {
@@ -169,9 +185,13 @@ export default function HorizontalLinearStepper(props) {
   const handleReset = () => {
     setActiveStep(0);
   };
-  const handleChange = (e) => {
-    formData[e.target.name] = e.target.value;
-    console.log(formData);
+  const handleChange = (e, index) => {
+    if(e.target.name == "participants"){
+      formData[e.target.name][index] = e.target.value;
+    }
+    else{
+      formData[e.target.name] = e.target.value;
+    }
   };
   return (
     <div className={classes.root}>
@@ -197,17 +217,14 @@ export default function HorizontalLinearStepper(props) {
       <div>
         {activeStep === steps.length ? (
           <div>
-            <Typography className={classes.instructions}>
-              All steps completed - you&apos;re finished
-            </Typography>
-            <Button onClick={handleReset} className={classes.button}>
+            <Button variant="contained" color="secondary" onClick={handleReset} className={classes.button}>
               Reset
             </Button>
+            <ToastContainer position="bottom-center"/>
           </div>
         ) : (
           <div>
             {getStepContent(activeStep, handleChange)}
-
             <div>
               <Button
                 disabled={activeStep === 0}

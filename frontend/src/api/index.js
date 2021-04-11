@@ -10,6 +10,16 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
+//Signin/Signup related endpoints
 export const signIn = (formData) => API.post('/user/signin', formData);
 export const signUp = (formData) => API.post('/user/signup', formData);
 export const verify = () => API.post('/user/verify');
+
+//Secret related endpoints
+export const createSecret = (formData) => API.post('/secret/create', formData);
+// export const verify = () => API.post('/user/verify');
+
+//Recovery related endpoints
+// export const signIn = (formData) => API.post('/user/signin', formData);
+// export const signUp = (formData) => API.post('/user/signup', formData);
+// export const verify = () => API.post('/user/verify');

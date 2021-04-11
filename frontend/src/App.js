@@ -9,6 +9,7 @@ import CreateSecretForm from './components/create_secret/create_secret'
 import {Link, BrowserRouter, Switch, Route, useHistory} from 'react-router-dom'
 import Auth from './components/Auth/Auth';
 import Dashboard from './components/Dashboard/Dashboard';
+import SharedByUser from './components/SharedByUser/SharedByUser';
 import SharedWithUser from './components/SharedWithUser/SharedWithUser';
 import RecoveryRequests from './components/RecoveryRequests/RecoveryRequests';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,31 +21,14 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
 }));
-const renderRoutes = (isVerified) => {
-  if (isVerified)
-    return (
-      <Switch>
-        <Route exact path="/" component={Home} />
-        <Route exact path="/dashboard" component={Dashboard} />
-        <Route exact path="/create_context" component={CreateSecretForm} />
-        <Route exact path="/auth" component={Dashboard} />
-      </Switch>
-    );
-  else
-    return (
-      <Switch>
-        <Route exact path="/" component={Home} />
-        <Route exact path="/dashboard" component={Home} />
-        <Route exact path="/create_context" component={Home} />
-        <Route exact path="/auth" component={Home} />
-      </Switch>
-    );
-};
+
 function App() {
   const classes = useStyles();
   let state = useSelector((state) => state);
   const dispatch = useDispatch();
   let [isVerified, setVerified] = useState(null);
+  let [reload, setReload] = useState(0);
+  const history = useHistory();
   useEffect(() => {
     verify()
       .then((res) => {
@@ -62,19 +46,22 @@ function App() {
         <Navbar />
         </Grid>
         <Grid item xs={12}>
-        <Switch>
-          <Route exact path="/" component={Home} /> 
-          { isVerified ? 
-            <Route exact path="/dashboard" component={Dashboard}/>:
-            <Route exact path="/dashboard" component={Home} />
+          { isVerified ?
+            <Switch>
+            <Route exact path="/dashboard" component={Dashboard}/>
+            <Route exact path="/create_secret" component={CreateSecretForm} />
+            <Route exact path="/sharedbyyou" component={SharedByUser} />
+            <Route exact path="/sharedwithyou" component={SharedWithUser} />
+            <Route exact path="/recoveryrequests" component={RecoveryRequests} />
+            <Route path="/" component={Dashboard}/>
+            </Switch>
+            :
+            <Switch>
+            <Route exact path="/auth" component={Auth} />
+            <Route path="/" component={Home} />
+            </Switch>
           }
-          <Route exact path="/auth" component={Auth} />
-          <Route exact path="/create_secret" component={CreateSecretForm} />
-          <Route exact path="/sharedwithyou" component={SharedWithUser} />
-          <Route exact path="/recoveryrequests" component={RecoveryRequests} />
-        </Switch>
         </Grid>
-        
         </Grid>
       </div>
     </BrowserRouter>

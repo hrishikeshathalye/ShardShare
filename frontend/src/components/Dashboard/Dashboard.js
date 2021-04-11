@@ -26,7 +26,7 @@ function Dashboard() {
                 </Grid>
                 <Grid container item xs >
                 <div className={classes.MasterCard}>
-                    <MasterCard title="Your secrets" description = "Seccrets that you created and shared" image="/images/confidential.png"/>
+                    <MasterCard title="Your secrets" description = "Seccrets that you created and shared" image="/images/confidential.png" link = '/sharedbyyou'/>
                     </div>
                 </Grid>
                 <Grid container item xs >
