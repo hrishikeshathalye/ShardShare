@@ -59,7 +59,7 @@ exports.request = async (req, res) => {
     let secret = await Secret.find({ _id: secretId });
     secret = secret[0];
     for (let i = 0; i < secret.sharedWith.length; i++) {
-      // ret = await sendMail(secret.sharedWith[i], requester, secret);
+      ret = await sendMail(secret.sharedWith[i], requester, secret);
     }
     res.status(200).json({ result: "Success" });
     // res.status(200).json({result: existingUser, token});
@@ -76,7 +76,7 @@ exports.approve = async (req, res) => {
   decodedData = jwt.decode(token);
   const approver = decodedData.email;
   try {
-    await recoveryRequest.update(
+    await recoveryRequest.updateOne(
       { requester: requester, secretId: secretId },
       { $push: { approved: approver } }
     );
@@ -93,7 +93,7 @@ exports.reject = async (req, res) => {
   decodedData = jwt.decode(token);
   const decliner = decodedData.email;
   try {
-    await recoveryRequest.update(
+    await recoveryRequest.updateOne(
       { requester: requester, secretId: secretId },
       { $push: { declined: decliner } }
     );
@@ -116,7 +116,6 @@ exports.getRecoveryRequests = async (req, res) => {
       sharedWith: secretCreator,
     });
     tmp = tmp[0];
-    //condition
     let numRejected = requests[i].declined.length;
     let numAccepted = requests[i].approved.length;
     if (numRejected > tmp.n - tmp.k) {

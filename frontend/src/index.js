@@ -16,14 +16,15 @@ const LoadingIndicator = props => {
   promiseInProgress &&
   <div style={{
   width: "100%",
-  height: "100",
+  height: "100%",
   display: "flex",
   justifyContent: "center",
   alignItems: "center"
   }}
   >
-  <div style={{margin: '3rem'}} >
-  <Loader type="TailSpin" color="#000000" height="100" width="100" />
+  <div style={{position:"absolute", backdropFilter:"blur(6px)",background: "rgba(255,255,255,0.5)", height:"100%", width:"100%",display: "flex", justifyContent: "center",
+    alignItems: "center"}}>
+    <Loader type="TailSpin" color="#000000" width="100" height="100" />
   </div>
   </div>
   );  

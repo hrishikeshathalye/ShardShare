@@ -24,7 +24,8 @@ exports.signin = async (req, res) => {
 }
 
 exports.signup = async (req, res) => {
-    const {email, password, confirmPassword, firstName, lastName, } = req.body;
+    const {email, password, confirmPassword, firstName, lastName} = req.body;
+    console.log(req.body)
     try {
         const existingUser = await User.findOne({ email });
         if(existingUser){
@@ -38,8 +39,8 @@ exports.signup = async (req, res) => {
         const token = jwt.sign({email: result.email, id: result._id}, 'test', {expiresIn:"1h"});
         res.status(200).json({result, token});
     } catch (error) {
-        res.status(500).json({ message : "Something went wrong"});
         console.log(error);
+        res.status(500).json({ message : "Something went wrong"});
     }
 }
 

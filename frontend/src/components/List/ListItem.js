@@ -17,6 +17,7 @@ import MouseOverPopover from "./PopOver";
 import FormatListNumberedIcon from "@material-ui/icons/FormatListNumbered";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import EventIcon from "@material-ui/icons/Event";
+import { trackPromise } from 'react-promise-tracker';
 import {
   recoverSecret,
   approveRequest,
@@ -40,34 +41,40 @@ const useStyles = makeStyles((theme) => ({
 
 const handleRecover = (secret) => {
   console.log(secret._id);
+  trackPromise(
   recoverSecret(secret._id)
     .then(() => {
       toast.success("Recovery Request Initiated");
     })
     .catch(() => {
       toast.failure("Some Error Occured");
-    });
+    })
+  );
 };
 
 const handleReject = (secret) => {
+  trackPromise(
   rejectRequest(secret._id, secret.requester)
     .then(() => {
-      toast.success("Recovery Request Initiated");
+      toast.warning("Recovery Request Rejected!");
     })
     .catch(() => {
       toast.failure("Some Error Occured");
-    });
+    })
+  );
 };
 
 const handleAccept = (secret) => {
   console.log(secret);
+  trackPromise(
   approveRequest(secret._id, secret.requester)
     .then(() => {
-      toast.success("Recovery Request Initiated");
+      toast.success("Recovery Request Accepted!");
     })
     .catch(() => {
       toast.failure("Some Error Occured");
-    });
+    })
+  );
 };
 
 const get_button_by_list_type = (type, secret) => {
