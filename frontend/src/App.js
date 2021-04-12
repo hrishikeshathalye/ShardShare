@@ -1,24 +1,21 @@
 import { React, useState, useEffect } from "react";
 // import logo from './logo.svg';
 import "./App.css";
-import { Container, Grid } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Home from "./components/Login/Landing/Landing";
 import Navbar from "./components/Navbar/Nav";
 import CreateSecretForm from "./components/create_secret/create_secret";
 import {
-  Redirect,
   BrowserRouter,
   Switch,
   Route,
-  useHistory,
 } from "react-router-dom";
 import Auth from "./components/Auth/Auth";
 import Dashboard from "./components/Dashboard/Dashboard";
 import SharedWithUser from "./components/SharedWithUser/SharedWithUser";
 import SharedByUser from "./components/SharedByUser/SharedByUser";
 import RecoveryRequests from "./components/RecoveryRequests/RecoveryRequests";
-import { useDispatch, useSelector } from "react-redux";
 import { verify } from "./api/index";
 
 const useStyles = makeStyles((theme) => ({
@@ -29,11 +26,7 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const classes = useStyles();
-  let state = useSelector((state) => state);
-  const dispatch = useDispatch();
   let [isVerified, setVerified] = useState(null);
-  let [reload, setReload] = useState(0);
-  const history = useHistory();
   useEffect(() => {
     verify()
       .then((res) => {

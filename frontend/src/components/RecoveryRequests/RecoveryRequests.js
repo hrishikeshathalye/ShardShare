@@ -4,6 +4,7 @@ import List from "../List/List";
 import Box from "@material-ui/core/Box";
 import { Typography } from "@material-ui/core";
 import { getRecoveryRequests } from "../../api/index";
+import { trackPromise } from 'react-promise-tracker';
 const useStyles = makeStyles({
   root: {
     flexGrow: 1,
@@ -18,10 +19,12 @@ export default function RecoveryRequests(props) {
   const classes = useStyles();
   const [secrets, setSecrets] = useState([]);
   useEffect(() => {
-    getRecoveryRequests().then((res) => {
-      console.log(res.data.secret_array);
-      setSecrets(res.data.secret_array);
-    });
+    trackPromise(
+      getRecoveryRequests().then((res) => {
+        console.log(res.data.secret_array);
+        setSecrets(res.data.secret_array);
+      })
+    );
   }, []);
   return (
     <cntainer>
@@ -36,8 +39,11 @@ export default function RecoveryRequests(props) {
           Recovery Requests
         </Typography>
       </Box>
-
-      <List listItems={secrets} list_for={"recovery_requests"} />
+      {secrets.length === 0 ? 
+      <Box margin="5rem" display="flex" justifyContent="center">
+      <Typography variant="h6" gutterBottom> No Pending Requests... </Typography>
+      </Box>
+      : <List listItems={secrets} list_for={"recovery_requests"} />}
     </cntainer>
   );
 }

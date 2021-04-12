@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     marginTop:'1rem',
-    marginRight: theme.spacing(1)
+    marginRight: theme.spacing(2)
   },
   instructions: {
     marginTop: theme.spacing(1),
@@ -38,7 +38,7 @@ function getSteps() {
 }
 
 function getStepContent(step, handleChange) {
-  if (Number(formData.n) != 0)
+  if (Number(formData.n) !== 0)
     formData.participants = Array(Number(formData.n)).fill("");
   const part_textboxes = formData.participants.map((number, index) => (
     <TextField
@@ -152,7 +152,7 @@ export default function HorizontalLinearStepper(props) {
     }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
-    if(activeStep == 3){
+    if(activeStep === 3){
       trackPromise(
         createSecret(formData).then(res=>{
           toast.success("Sending Emails Successful!")

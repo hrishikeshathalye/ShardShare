@@ -4,6 +4,7 @@ import List from "../List/List";
 import Box from "@material-ui/core/Box";
 import { Typography } from "@material-ui/core";
 import { getSharedWithUser } from "../../api/index";
+import { trackPromise } from 'react-promise-tracker';
 const useStyles = makeStyles({
   root: {
     flexGrow: 1,
@@ -18,10 +19,12 @@ export default function SharedWithUser(props) {
   const classes = useStyles();
   const [secrets, setSecrets] = useState([]);
   useEffect(() => {
-    getSharedWithUser().then((res) => {
-      //console.log(res.data);
-      setSecrets(res.data.secret_array);
-    });
+    trackPromise(
+      getSharedWithUser().then((res) => {
+        //console.log(res.data);
+        setSecrets(res.data.secret_array);
+      })
+    );
   }, []);
   return (
     <cntainer>
@@ -36,8 +39,11 @@ export default function SharedWithUser(props) {
           Secrets Shared With You
         </Typography>
       </Box>
-
-      <List listItems={secrets} list_for={"shared_with_user"} />
+      {secrets.length === 0 ? 
+      <Box margin="5rem" display="flex" justifyContent="center">
+      <Typography variant="h6" gutterBottom> No Secrets Have Been Shared With You Yet... </Typography>
+      </Box>:
+      <List listItems={secrets} list_for={"shared_with_user"} />}
     </cntainer>
   );
 }
