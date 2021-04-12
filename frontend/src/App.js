@@ -7,7 +7,7 @@ import Home from "./components/Login/Landing/Landing";
 import Navbar from "./components/Navbar/Nav";
 import CreateSecretForm from "./components/create_secret/create_secret";
 import {
-  Link,
+  Redirect,
   BrowserRouter,
   Switch,
   Route,
@@ -44,7 +44,7 @@ function App() {
       });
   }, []);
   return (
-    <BrowserRouter>
+    <BrowserRouter forceRefresh={true}>
       <div className={classes.root}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
@@ -58,12 +58,12 @@ function App() {
             <Route exact path="/sharedbyyou" component={SharedByUser} />
             <Route exact path="/sharedwithyou" component={SharedWithUser} />
             <Route exact path="/recoveryrequests" component={RecoveryRequests} />
-            <Route path="/" component={Dashboard}/>
+            <Route exact path="/" component={Dashboard}/>
             </Switch>
             :
             <Switch>
             <Route exact path="/auth" component={Auth} />
-            <Route path="/" component={Home} />
+            <Route exact path="/" component={Home} />
             </Switch>
           }
         </Grid>
