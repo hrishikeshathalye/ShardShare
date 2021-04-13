@@ -25,13 +25,16 @@ export const getSharedWithUser = () => API.post("/secret/get_shared_with_user");
 
 //Recovery related endpoints
 export const recoverSecret = (secretId) =>
-  API.post("/recover/request/" + secretId);
-export const approveRequest = (secretId, requester) =>
-  API.post(`/recover/approve/${secretId}/${requester}`);
+  API.post("/recover/request/", { secretId });
+export const approveRequest = (secretId, requester, shard) =>
+  API.post(`/recover/approve/`, {
+    secretId,
+    requester,
+    shard,
+  });
 export const rejectRequest = (secretId, requester) =>
-  API.post(`/recover/reject/${secretId}/${requester}`);
+  API.post(`/recover/reject/`, { secretId, requester });
 export const getRecoveryRequests = () =>
   API.post("/recover/getRecoveryRequests");
-// export const signIn = (formData) => API.post('/user/signin', formData);
-// export const signUp = (formData) => API.post('/user/signup', formData);
-// export const verify = () => API.post('/user/verify');
+export const combineShards = (shardArray) =>
+  API.post("/recover/combineShards", { shardArray });

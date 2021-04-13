@@ -13,7 +13,7 @@ import MouseOverPopover from "./PopOver";
 import FormatListNumberedIcon from "@material-ui/icons/FormatListNumbered";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import EventIcon from "@material-ui/icons/Event";
-import { trackPromise } from 'react-promise-tracker';
+import { trackPromise } from "react-promise-tracker";
 import {
   recoverSecret,
   approveRequest,
@@ -38,42 +38,49 @@ const useStyles = makeStyles((theme) => ({
 const handleRecover = (secret) => {
   console.log(secret._id);
   trackPromise(
-  recoverSecret(secret._id)
-    .then(() => {
-      toast.success("Recovery Request Initiated");
-    })
-    .catch(() => {
-      toast.failure("Some Error Occured");
-    })
+    recoverSecret(secret._id)
+      .then(() => {
+        toast.success("Recovery Request Initiated");
+        window.location.reload(false);
+      })
+      .catch(() => {
+        toast.failure("Some Error Occured");
+        window.location.reload(false);
+      })
   );
 };
 
 const handleReject = (secret) => {
+  console.log(secret.requester);
   trackPromise(
-  rejectRequest(secret._id, secret.requester)
-    .then(() => {
-      toast.warning("Recovery Request Rejected!");
-    })
-    .catch(() => {
-      toast.failure("Some Error Occured");
-    })
+    rejectRequest(secret._id, secret.requester)
+      .then(() => {
+        toast.warning("Recovery Request Rejected!");
+        window.location.reload(false);
+      })
+      .catch(() => {
+        toast.failure("Some Error Occured");
+        window.location.reload(false);
+      })
   );
 };
 
-const handleAccept = (secret) => {
+const handleAccept = (secret, shard) => {
   console.log(secret);
   trackPromise(
-  approveRequest(secret._id, secret.requester)
-    .then(() => {
-      toast.success("Recovery Request Accepted!");
-    })
-    .catch(() => {
-      toast.failure("Some Error Occured");
-    })
+    approveRequest(secret._id, secret.requester, shard)
+      .then(() => {
+        toast.success("Recovery Request Accepted!");
+        window.location.reload(false);
+      })
+      .catch(() => {
+        toast.failure("Some Error Occured");
+        window.location.reload(false);
+      })
   );
 };
 
-const get_button_by_list_type = (type, secret) => {
+const get_button_by_list_type = (type, secret, shard) => {
   if (type === "shared_by_user") {
     return (
       <Button variant="outlined" color="primary" href="#outlined-buttons">
@@ -84,12 +91,7 @@ const get_button_by_list_type = (type, secret) => {
   if (type === "shared_with_user") {
     if (secret.state === "pending") {
       return (
-        <Button
-          variant="outlined"
-          color="primary"
-          href="#outlined-buttons"
-          disabled
-        >
+        <Button variant="outlined" color="primary" disabled>
           Request Pending
         </Button>
       );
@@ -99,10 +101,9 @@ const get_button_by_list_type = (type, secret) => {
         <Button
           variant="outlined"
           color="primary"
-          href="#outlined-buttons"
-          disabled
+          href={`/recombine/${secret.k}`}
         >
-          Request Recoverd
+          Recombine Secret
         </Button>
       );
     }
@@ -110,7 +111,6 @@ const get_button_by_list_type = (type, secret) => {
       <Button
         variant="outlined"
         color="primary"
-        href="#outlined-buttons"
         onClick={() => handleRecover(secret)}
       >
         Recover
@@ -150,7 +150,7 @@ const get_button_by_list_type = (type, secret) => {
           href="#outlined-buttons"
           disabled
         >
-          Request Recoverd
+          Request Recovered
         </Button>
       );
     }
@@ -158,8 +158,7 @@ const get_button_by_list_type = (type, secret) => {
       <Button
         variant="outlined"
         color="primary"
-        href="#outlined-buttons"
-        onClick={() => handleAccept(secret)}
+        onClick={() => handleAccept(secret, shard)}
       >
         Accept
       </Button>
@@ -210,7 +209,7 @@ export default function InteractiveList(props) {
                       }}
                     />
                   ) : (
-                    get_button_by_list_type(props.list_for, props.secret)
+                    get_button_by_list_type(props.list_for, props.secret, shard)
                   )}
                 </ListItemSecondaryAction>
               </ListItem>
@@ -225,7 +224,8 @@ export default function InteractiveList(props) {
                   {props.list_for === "recovery_requests" ? (
                     get_button_by_list_type(
                       "recovery_requests_accept",
-                      props.secret
+                      props.secret,
+                      shard
                     )
                   ) : (
                     <></>
@@ -243,7 +243,8 @@ export default function InteractiveList(props) {
                   {props.list_for === "recovery_requests" ? (
                     get_button_by_list_type(
                       "recovery_requests_reject",
-                      props.secret
+                      props.secret,
+                      shard
                     )
                   ) : (
                     <></>

@@ -117,11 +117,16 @@ exports.get_secrets_shared_with_user = async (req, res) => {
     } else {
       tmp = tmp[0];
       let numAccepted = tmp.approved.length;
-      if (numAccepted >= secrets[i].k) {
-        s_tmp["state"] = "accepted";
-      } else {
-        s_tmp["state"] = "pending";
+      if (tmp.requester === secretCreator) {
+        if (numAccepted >= secrets[i].k) {
+          s_tmp["state"] = "accepted";
+        } else {
+          s_tmp["state"] = "pending";
+        }
       }
+      // else{
+      //   s_tmp["state"] = "noRequest";
+      // }
     }
     // console.log(tmp);
     all_secrets.push(s_tmp);
