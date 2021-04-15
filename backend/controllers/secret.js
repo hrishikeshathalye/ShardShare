@@ -54,19 +54,40 @@ exports.create = async (req, res) => {
   let secret = formData.secret;
   const n = parseInt(formData.n);
   const k = parseInt(formData.k);
+  if(formData._id === ""){
+    id = undefined;
+  }
+  else{
+    id = formData._id;
+  }
   const participants = formData.participants;
   token = req.headers.authorization.split(" ")[1];
   decodedData = jwt.decode(token);
   const secretCreator = decodedData.email;
   try {
-    const result = await Secret.create({
-      date: Date(),
-      owner: secretCreator,
-      sharedWith: participants,
-      secretName: secretName,
-      n: n,
-      k: k,
-    });
+    let result;
+    if(id === undefined){
+      result = await Secret.create({
+        date: Date(),
+        owner: secretCreator,
+        sharedWith: participants,
+        secretName: secretName,
+        n: n,
+        k: k
+      });
+    }else{
+      result = await Secret.findOneAndUpdate({_id: id}, 
+      {
+        date: Date(),
+        sharedWith: participants,
+        secretName: secretName,
+        n: n,
+        k: k
+      }, 
+      {
+        new: true
+      });
+    }
     secret = Buffer.from(secret);
     const shares = sss.split(secret, { shares: n, threshold: k });
     for (let i = 0; i < shares.length; i++) {

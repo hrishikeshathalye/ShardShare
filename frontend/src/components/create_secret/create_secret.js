@@ -13,9 +13,12 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import HorizontalLinearStepper from "./stepper";
+import { useHistory } from 'react-router-dom';
 
 export default function CreateSecretForm() {
   const classes = useStyles();
+  const history = useHistory();
+  const secret = history.location?.state?.secret;
   return (
     <Container component="main" maxWidth="xs">
       <Box
@@ -29,7 +32,7 @@ export default function CreateSecretForm() {
         Create New Secret
       </Typography>
       </Box>
-      <HorizontalLinearStepper />
+      <HorizontalLinearStepper secret={secret}/>
     </Container>
   );
 }

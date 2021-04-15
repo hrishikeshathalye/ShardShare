@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "../List/List";
 import Box from "@material-ui/core/Box";
-import { Typography } from "@material-ui/core";
+import { Typography, Container } from "@material-ui/core";
 import { getSharedByUser } from "../../api/index";
 import { trackPromise } from 'react-promise-tracker';
 const useStyles = makeStyles({
@@ -27,7 +27,7 @@ export default function SharedWithUser(props) {
     );
   }, []);
   return (
-    <cntainer>
+    <Container>
       <Box
         display="flex"
         justifyContent="center"
@@ -44,6 +44,6 @@ export default function SharedWithUser(props) {
       <Typography variant="h6" gutterBottom> No Secrets Created Yet... </Typography>
       </Box>:
       <List listItems={secrets} list_for={"shared_by_user"} />}
-    </cntainer>
+    </Container>
   );
 }

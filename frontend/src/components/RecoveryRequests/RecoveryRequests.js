@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "../List/List";
 import Box from "@material-ui/core/Box";
-import { Typography } from "@material-ui/core";
+import { Typography, Container } from "@material-ui/core";
 import { getRecoveryRequests } from "../../api/index";
-import { trackPromise } from 'react-promise-tracker';
+import { trackPromise } from "react-promise-tracker";
 const useStyles = makeStyles({
   root: {
     flexGrow: 1,
@@ -27,7 +27,7 @@ export default function RecoveryRequests(props) {
     );
   }, []);
   return (
-    <cntainer>
+    <Container>
       <Box
         display="flex"
         justifyContent="center"
@@ -44,6 +44,6 @@ export default function RecoveryRequests(props) {
       <Typography variant="h6" gutterBottom> No Pending Requests... </Typography>
       </Box>
       : <List listItems={secrets} list_for={"recovery_requests"} />}
-    </cntainer>
+    </Container>
   );
 }

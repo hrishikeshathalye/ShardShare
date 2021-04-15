@@ -14,6 +14,7 @@ import FormatListNumberedIcon from "@material-ui/icons/FormatListNumbered";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import EventIcon from "@material-ui/icons/Event";
 import { trackPromise } from "react-promise-tracker";
+import { useHistory } from 'react-router-dom';
 import {
   recoverSecret,
   approveRequest,
@@ -35,145 +36,150 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const handleRecover = (secret) => {
-  console.log(secret._id);
-  trackPromise(
-    recoverSecret(secret._id)
-      .then(() => {
-        toast.success("Recovery Request Initiated");
-        window.location.reload(false);
-      })
-      .catch(() => {
-        toast.failure("Some Error Occured");
-        window.location.reload(false);
-      })
-  );
-};
-
-const handleReject = (secret) => {
-  console.log(secret.requester);
-  trackPromise(
-    rejectRequest(secret._id, secret.requester)
-      .then(() => {
-        toast.warning("Recovery Request Rejected!");
-        window.location.reload(false);
-      })
-      .catch(() => {
-        toast.failure("Some Error Occured");
-        window.location.reload(false);
-      })
-  );
-};
-
-const handleAccept = (secret, shard) => {
-  console.log(secret);
-  trackPromise(
-    approveRequest(secret._id, secret.requester, shard)
-      .then(() => {
-        toast.success("Recovery Request Accepted!");
-        window.location.reload(false);
-      })
-      .catch(() => {
-        toast.failure("Some Error Occured");
-        window.location.reload(false);
-      })
-  );
-};
-
-const get_button_by_list_type = (type, secret, shard) => {
-  if (type === "shared_by_user") {
-    return (
-      <Button variant="outlined" color="primary" href="#outlined-buttons">
-        Modify & Reshare
-      </Button>
-    );
-  }
-  if (type === "shared_with_user") {
-    if (secret.state === "pending") {
-      return (
-        <Button variant="outlined" color="primary" disabled>
-          Request Pending
-        </Button>
-      );
-    }
-    if (secret.state === "accepted") {
-      return (
-        <Button
-          variant="outlined"
-          color="primary"
-          href={`/recombine/${secret.k}`}
-        >
-          Recombine Secret
-        </Button>
-      );
-    }
-    return (
-      <Button
-        variant="outlined"
-        color="primary"
-        onClick={() => handleRecover(secret)}
-      >
-        Recover
-      </Button>
-    );
-  }
-  if (type === "recovery_requests_reject") {
-    if (secret.state === "accepted") {
-      return (
-        <Button
-          variant="outlined"
-          color="primary"
-          href="#outlined-buttons"
-          disabled
-        >
-          Request Recoverd
-        </Button>
-      );
-    }
-    return (
-      <Button
-        variant="outlined"
-        color="primary"
-        href="#outlined-buttons"
-        onClick={() => handleReject(secret)}
-      >
-        Reject
-      </Button>
-    );
-  }
-  if (type === "recovery_requests_accept") {
-    if (secret.state === "accepted") {
-      return (
-        <Button
-          variant="outlined"
-          color="primary"
-          href="#outlined-buttons"
-          disabled
-        >
-          Request Recovered
-        </Button>
-      );
-    }
-    return (
-      <Button
-        variant="outlined"
-        color="primary"
-        onClick={() => handleAccept(secret, shard)}
-      >
-        Accept
-      </Button>
-    );
-  }
-};
 
 export default function InteractiveList(props) {
   const classes = useStyles();
   const [dense, setDense] = React.useState(false);
   const [secondary, setSecondary] = React.useState(false);
   const [shard, setShard] = React.useState(false);
+  const history = useHistory();
+  const handleRecover = (secret) => {
+    console.log(secret._id);
+    trackPromise(
+      recoverSecret(secret._id)
+        .then(() => {
+          toast.success("Recovery Request Initiated");
+          window.location.reload(false);
+        })
+        .catch(() => {
+          toast.failure("Some Error Occured");
+          window.location.reload(false);
+        })
+    );
+  };
+  
+  const handleReject = (secret) => {
+    console.log(secret.requester);
+    trackPromise(
+      rejectRequest(secret._id, secret.requester)
+        .then(() => {
+          toast.warning("Recovery Request Rejected!");
+          window.location.reload(false);
+        })
+        .catch(() => {
+          toast.failure("Some Error Occured");
+          window.location.reload(false);
+        })
+    );
+  };
+  
+  const handleReshare = (secret) => {
+    history.push('/create_secret', { secret: secret});
+  };
+  
+  const handleAccept = (secret, shard) => {
+    console.log(secret);
+    trackPromise(
+      approveRequest(secret._id, secret.requester, shard)
+        .then(() => {
+          toast.success("Recovery Request Accepted!");
+          window.location.reload(false);
+        })
+        .catch(() => {
+          toast.failure("Some Error Occured");
+          window.location.reload(false);
+        })
+    );
+  };
+  
+  const get_button_by_list_type = (type, secret, shard) => {
+    if (type === "shared_by_user") {
+      return (
+        <Button variant="outlined" color="primary" onClick={() => handleReshare(secret)}>
+          Modify & Reshare
+        </Button>
+      );
+    }
+    if (type === "shared_with_user") {
+      if (secret.state === "pending") {
+        return (
+          <Button variant="outlined" color="primary" disabled>
+            Request Pending
+          </Button>
+        );
+      }
+      if (secret.state === "accepted") {
+        return (
+          <Button
+            variant="outlined"
+            color="primary"
+            href={`/recombine/${secret.k}`}
+          >
+            Recombine Secret
+          </Button>
+        );
+      }
+      return (
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={() => handleRecover(secret)}
+        >
+          Recover
+        </Button>
+      );
+    }
+    if (type === "recovery_requests_reject") {
+      if (secret.state === "accepted") {
+        return (
+          <Button
+            variant="outlined"
+            color="primary"
+            href="#outlined-buttons"
+            disabled
+          >
+            Request Recoverd
+          </Button>
+        );
+      }
+      return (
+        <Button
+          variant="outlined"
+          color="primary"
+          href="#outlined-buttons"
+          onClick={() => handleReject(secret)}
+        >
+          Reject
+        </Button>
+      );
+    }
+    if (type === "recovery_requests_accept") {
+      if (secret.state === "accepted") {
+        return (
+          <Button
+            variant="outlined"
+            color="primary"
+            href="#outlined-buttons"
+            disabled
+          >
+            Request Recovered
+          </Button>
+        );
+      }
+      return (
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={() => handleAccept(secret, shard)}
+        >
+          Accept
+        </Button>
+      );
+    }
+  };
   let participants = props.secret.sharedWith.map((ele, index) => {
     return (
-      <ListItem>
+      <ListItem key={index.toString()}>
         <ListItemText primary={ele} />
       </ListItem>
     );

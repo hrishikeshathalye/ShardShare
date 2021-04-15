@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useRef } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Stepper from "@material-ui/core/Stepper";
@@ -28,6 +28,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+var formData = {
+  secret_name: "",
+  secret: "",
+  n: "",
+  k: "",
+  participants: [],
+  _id:""
+};
+
 function getSteps() {
   return [
     "Give Secret Name",
@@ -38,8 +47,14 @@ function getSteps() {
 }
 
 function getStepContent(step, handleChange) {
-  if (Number(formData.n) !== 0)
+  if (Number(formData.n) === "")
     formData.participants = Array(Number(formData.n)).fill("");
+  else{
+    let originaln = formData.participants.length;
+    for(let i = 0; i < parseInt(formData.n) - originaln; i++){
+      formData.participants.push("");
+    }
+  }
   const part_textboxes = formData.participants.map((number, index) => (
     <TextField
       variant="outlined"
@@ -50,7 +65,7 @@ function getStepContent(step, handleChange) {
       label={"participant" + index.toString() + "'s email"}
       id={"participant" + index.toString()}
       onChange={(e)=>handleChange(e, index)}
-      defaultValue={""}
+      defaultValue={formData.participants[index]}
       key={index.toString()}
     />
   ));
@@ -122,20 +137,20 @@ function getStepContent(step, handleChange) {
       return "Unknown step";
   }
 }
-var formData = {
-  secret_name: "",
-  secret: "",
-  n: "",
-  k: "",
-  participants: [],
-};
 export default function HorizontalLinearStepper(props) {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
-
   const [skipped, setSkipped] = useState(new Set());
+  const ref = useRef(0);
   const steps = getSteps();
-
+  if(ref.current===0 && props.secret !== undefined){
+    formData.secret_name = props.secret.secretName;
+    formData.n = props.secret.n.toString();
+    formData.k = props.secret.k.toString();
+    formData._id = props.secret._id;
+    formData.participants = [...(props.secret.sharedWith)];
+    ref.current = 1;
+  }
   const isStepOptional = (step) => {
     return false;
   };
@@ -186,12 +201,13 @@ export default function HorizontalLinearStepper(props) {
     setActiveStep(0);
   };
   const handleChange = (e, index) => {
-    if(e.target.name == "participants"){
+    if(e.target.name === "participants"){
       formData[e.target.name][index] = e.target.value;
     }
     else{
       formData[e.target.name] = e.target.value;
     }
+    // console.log(formData);
   };
   return (
     <div className={classes.root}>
