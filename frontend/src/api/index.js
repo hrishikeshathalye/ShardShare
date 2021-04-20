@@ -33,8 +33,10 @@ export const approveRequest = (secretId, requester, shard) =>
     shard,
   });
 export const rejectRequest = (secretId, requester) =>
-  API.post(`/recover/reject/`, { secretId, requester });
+  API.post(`/recover/reject`, { secretId, requester });
 export const getRecoveryRequests = () =>
   API.post("/recover/getRecoveryRequests");
 export const combineShards = (shardArray) =>
   API.post("/recover/combineShards", { shardArray });
+export const deleteRequests = (secretId) =>
+  API.post(`/recover/deleteRequests`, {secretId});

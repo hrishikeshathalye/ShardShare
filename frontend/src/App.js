@@ -34,7 +34,7 @@ function App() {
       });
   }, []);
   return (
-    <BrowserRouter forceRefresh={true}>
+    <BrowserRouter>
       <div className={classes.root}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
@@ -57,12 +57,12 @@ function App() {
                   component={RecoveryRequests}
                 />
                 <Route exact path="/recombine/:k" component={RecoverSecret} />
-                <Route exact path="/" component={Dashboard} />
+                <Route path="/" component={Dashboard} />
               </Switch>
             ) : (
               <Switch>
                 <Route exact path="/auth" component={Auth} />
-                <Route exact path="/" component={Home} />
+                <Route path="/" component={Home} />
               </Switch>
             )}
           </Grid>

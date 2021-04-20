@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import decode from "jwt-decode";
 import * as actionType from "../../constants/actionTypes";
 import useStyles from "./styles";
+import {browserHistory} from "react-router";
 
 const Navbar = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
@@ -16,7 +17,7 @@ const Navbar = () => {
   const logout = () => {
     dispatch({ type: actionType.LOGOUT });
     setUser(null);
-    history.push("/");
+    window.location = "/";
   };
 
   useEffect(() => {

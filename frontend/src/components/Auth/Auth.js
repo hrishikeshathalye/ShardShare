@@ -45,16 +45,15 @@ const SignUp = () => {
 
     try {
       dispatch({ type: AUTH, data: { result, token } });
-      history.push('/dashboard');
+      window.location = "/dashboard";
     } catch (error) {
-      console.log(error);
+      alert("Some error occurred. Try again");
     }
   };
 
   const googleError = () => alert('Google Sign In was unsuccessful. Try again later');
 
   const handleChange = (e) => {
-    console.log(form)
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 

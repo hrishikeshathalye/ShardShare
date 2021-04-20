@@ -12,7 +12,7 @@ import { trackPromise } from 'react-promise-tracker';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { createSecret } from '../../api/index';
+import { createSecret, deleteRequests } from '../../api/index';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -168,13 +168,30 @@ export default function HorizontalLinearStepper(props) {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
     if(activeStep === 3){
-      trackPromise(
-        createSecret(formData).then(res=>{
-          toast.success("Sending Emails Successful!")
-        }).catch(()=>{
-          toast.error("There was some error. Try again.")
-        })
-      );
+      if(ref.current === 1){
+        trackPromise(
+          deleteRequests(formData._id).then(res=>{
+            toast.success("Deleted all pending requests on this secret.");
+            trackPromise(createSecret(formData).then(res=>{
+              toast.success("Sending emails successful! The secret has been reshared.")
+            })).catch(()=>{
+              toast.error("There was some error. Try again.")
+            })
+          }).catch(()=>{
+            toast.error("There was some error. Try again.")
+          })
+        );
+        ref.current = 0;
+      }
+      else{
+        trackPromise(
+          createSecret(formData).then(res=>{
+            toast.success("Sending emails successful! The secret has been shared.")
+          }).catch(()=>{
+            toast.error("There was some error. Try again.")
+          })
+        );
+      }
     }
   };
 
@@ -207,7 +224,6 @@ export default function HorizontalLinearStepper(props) {
     else{
       formData[e.target.name] = e.target.value;
     }
-    // console.log(formData);
   };
   return (
     <div className={classes.root}>

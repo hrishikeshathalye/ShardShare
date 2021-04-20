@@ -20,7 +20,7 @@ import {
   approveRequest,
   rejectRequest,
 } from "../../api/index.js";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from 'react-toastify';
 import TextField from "@material-ui/core/TextField";
 
 toast.configure();

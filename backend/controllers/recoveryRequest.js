@@ -196,3 +196,14 @@ exports.combineShards = async (req, res) => {
     res.status(500).json({ message: "Some Error Occured" });
   }
 };
+
+exports.deleteRequests = async (req, res) => {
+  try {
+    const secretId = req.body.secretId;
+    await recoveryRequest.deleteMany({secretId: secretId});
+    res.status(200).json({ message : "Successfully deleted recovery requests"});
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Some Error Occured" });
+  }
+};

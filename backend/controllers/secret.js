@@ -38,10 +38,8 @@ const sendMail = async (participant, shard, id, owner, formData) => {
   return new Promise((resolve, reject) => {
     transporter.sendMail(mailOptions, function (err, data) {
       if (err) {
-        console.log("Error Occured");
         reject(0);
       } else {
-        console.log("Email sent successfully");
         resolve(1);
       }
     });
@@ -104,19 +102,14 @@ exports.create = async (req, res) => {
     }
     res.status(200).json({ result: "Success" });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Something went wrong" });
   }
-  // let temp = Buffer.from(hexString, "hex")
-  // const recovered = sss.combine(shares.slice(0, 2))
-  // console.log(recovered)
 };
 
 exports.get_secrets_shared_by_user = async (req, res) => {
   token = req.headers.authorization.split(" ")[1];
   decodedData = jwt.decode(token);
   const secretCreator = decodedData.email;
-  //console.log(secretCreator);
   secrets = await Secret.find({ owner: secretCreator });
   res.status(200).json({ secret_array: secrets });
 };
@@ -126,14 +119,12 @@ exports.get_secrets_shared_with_user = async (req, res) => {
   token = req.headers.authorization.split(" ")[1];
   decodedData = jwt.decode(token);
   const secretCreator = decodedData.email;
-  //console.log(secretCreator);
   all_secrets = [];
   secrets = await Secret.find({ sharedWith: secretCreator });
   for (var i = 0; i < secrets.length; i++) {
     s_tmp = { ...secrets[i]._doc };
     tmp = await recoveryRequest.find({ secretId: secrets[i]._id });
     if (tmp.length === 0) {
-      console.log(tmp);
       s_tmp["state"] = "noRequest";
     } else {
       tmp = tmp[0];
@@ -145,11 +136,7 @@ exports.get_secrets_shared_with_user = async (req, res) => {
           s_tmp["state"] = "pending";
         }
       }
-      // else{
-      //   s_tmp["state"] = "noRequest";
-      // }
     }
-    // console.log(tmp);
     all_secrets.push(s_tmp);
   }
   res.status(200).json({ secret_array: all_secrets });
