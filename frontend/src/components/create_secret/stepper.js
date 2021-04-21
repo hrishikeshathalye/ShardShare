@@ -8,19 +8,19 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import { Box, Container } from "@material-ui/core";
-import { trackPromise } from 'react-promise-tracker';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { trackPromise } from "react-promise-tracker";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-import { createSecret, deleteRequests } from '../../api/index';
+import { createSecret, deleteRequests } from "../../api/index";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
   },
   button: {
-    marginTop:'1rem',
-    marginRight: theme.spacing(2)
+    marginTop: "1rem",
+    marginRight: theme.spacing(2),
   },
   instructions: {
     marginTop: theme.spacing(1),
@@ -34,7 +34,7 @@ var formData = {
   n: "",
   k: "",
   participants: [],
-  _id:""
+  _id: "",
 };
 
 function getSteps() {
@@ -49,9 +49,9 @@ function getSteps() {
 function getStepContent(step, handleChange) {
   if (Number(formData.n) === "")
     formData.participants = Array(Number(formData.n)).fill("");
-  else{
+  else {
     let originaln = formData.participants.length;
-    for(let i = 0; i < parseInt(formData.n) - originaln; i++){
+    for (let i = 0; i < parseInt(formData.n) - originaln; i++) {
       formData.participants.push("");
     }
   }
@@ -64,7 +64,7 @@ function getStepContent(step, handleChange) {
       name={"participants"}
       label={"participant" + index.toString() + "'s email"}
       id={"participant" + index.toString()}
-      onChange={(e)=>handleChange(e, index)}
+      onChange={(e) => handleChange(e, index)}
       defaultValue={formData.participants[index]}
       key={index.toString()}
     />
@@ -143,12 +143,12 @@ export default function HorizontalLinearStepper(props) {
   const [skipped, setSkipped] = useState(new Set());
   const ref = useRef(0);
   const steps = getSteps();
-  if(ref.current===0 && props.secret !== undefined){
+  if (ref.current === 0 && props.secret !== undefined) {
     formData.secret_name = props.secret.secretName;
     formData.n = props.secret.n.toString();
     formData.k = props.secret.k.toString();
     formData._id = props.secret._id;
-    formData.participants = [...(props.secret.sharedWith)];
+    formData.participants = [...props.secret.sharedWith];
     ref.current = 1;
   }
   const isStepOptional = (step) => {
@@ -167,29 +167,38 @@ export default function HorizontalLinearStepper(props) {
     }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
-    if(activeStep === 3){
-      if(ref.current === 1){
+    if (activeStep === 3) {
+      if (ref.current === 1) {
         trackPromise(
-          deleteRequests(formData._id).then(res=>{
-            toast.success("Deleted all pending requests on this secret.");
-            trackPromise(createSecret(formData).then(res=>{
-              toast.success("Sending emails successful! The secret has been reshared.")
-            })).catch(()=>{
-              toast.error("There was some error. Try again.")
+          deleteRequests(formData._id)
+            .then((res) => {
+              toast.success("Deleted all pending requests on this secret.");
+              trackPromise(
+                createSecret(formData).then((res) => {
+                  toast.success(
+                    "Sending emails successful! The secret has been reshared."
+                  );
+                })
+              ).catch(() => {
+                toast.error("There was some error. Try again.");
+              });
             })
-          }).catch(()=>{
-            toast.error("There was some error. Try again.")
-          })
+            .catch(() => {
+              toast.error("There was some error. Try again.");
+            })
         );
         ref.current = 0;
-      }
-      else{
+      } else {
         trackPromise(
-          createSecret(formData).then(res=>{
-            toast.success("Sending emails successful! The secret has been shared.")
-          }).catch(()=>{
-            toast.error("There was some error. Try again.")
-          })
+          createSecret(formData)
+            .then((res) => {
+              toast.success(
+                "Sending emails successful! The secret has been shared."
+              );
+            })
+            .catch(() => {
+              toast.error("There was some error. Try again.");
+            })
         );
       }
     }
@@ -218,16 +227,15 @@ export default function HorizontalLinearStepper(props) {
     setActiveStep(0);
   };
   const handleChange = (e, index) => {
-    if(e.target.name === "participants"){
+    if (e.target.name === "participants") {
       formData[e.target.name][index] = e.target.value;
-    }
-    else{
+    } else {
       formData[e.target.name] = e.target.value;
     }
   };
   return (
     <div className={classes.root}>
-      <Stepper activeStep={activeStep}>
+      <Stepper activeStep={activeStep} orientation="vertical">
         {steps.map((label, index) => {
           const stepProps = {};
           const labelProps = {};
@@ -240,7 +248,7 @@ export default function HorizontalLinearStepper(props) {
             stepProps.completed = false;
           }
           return (
-            <Step key={label} {...stepProps}>
+            <Step key={label} id={"test" + index.toString()} {...stepProps}>
               <StepLabel {...labelProps}>{label}</StepLabel>
             </Step>
           );
@@ -249,10 +257,15 @@ export default function HorizontalLinearStepper(props) {
       <div>
         {activeStep === steps.length ? (
           <div>
-            <Button variant="contained" color="secondary" onClick={handleReset} className={classes.button}>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={handleReset}
+              className={classes.button}
+            >
               Reset
             </Button>
-            <ToastContainer position="bottom-center"/>
+            <ToastContainer position="bottom-center" />
           </div>
         ) : (
           <div>

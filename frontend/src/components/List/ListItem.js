@@ -14,13 +14,13 @@ import FormatListNumberedIcon from "@material-ui/icons/FormatListNumbered";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import EventIcon from "@material-ui/icons/Event";
 import { trackPromise } from "react-promise-tracker";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 import {
   recoverSecret,
   approveRequest,
   rejectRequest,
 } from "../../api/index.js";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
 import TextField from "@material-ui/core/TextField";
 
 toast.configure();
@@ -34,8 +34,14 @@ const useStyles = makeStyles((theme) => ({
   title: {
     margin: theme.spacing(4, 0, 2),
   },
+  buttons: {
+    width: "100%",
+    margin: "0.5rem",
+  },
+  shardText: {
+    display: "block",
+  },
 }));
-
 
 export default function InteractiveList(props) {
   const classes = useStyles();
@@ -57,7 +63,7 @@ export default function InteractiveList(props) {
         })
     );
   };
-  
+
   const handleReject = (secret) => {
     console.log(secret.requester);
     trackPromise(
@@ -72,11 +78,11 @@ export default function InteractiveList(props) {
         })
     );
   };
-  
+
   const handleReshare = (secret) => {
-    history.push('/create_secret', { secret: secret});
+    history.push("/create_secret", { secret: secret });
   };
-  
+
   const handleAccept = (secret, shard) => {
     console.log(secret);
     trackPromise(
@@ -91,11 +97,17 @@ export default function InteractiveList(props) {
         })
     );
   };
-  
+
   const get_button_by_list_type = (type, secret, shard) => {
     if (type === "shared_by_user") {
       return (
-        <Button variant="outlined" id="reshare" color="primary" onClick={() => handleReshare(secret)}>
+        <Button
+          className={classes.buttons}
+          variant="outlined"
+          id="reshare"
+          color="primary"
+          onClick={() => handleReshare(secret)}
+        >
           Modify & Reshare
         </Button>
       );
@@ -103,7 +115,13 @@ export default function InteractiveList(props) {
     if (type === "shared_with_user") {
       if (secret.state === "pending") {
         return (
-          <Button variant="outlined" id="requestPending" color="primary" disabled>
+          <Button
+            className={classes.buttons}
+            variant="outlined"
+            id="requestPending"
+            color="primary"
+            disabled
+          >
             Request Pending
           </Button>
         );
@@ -111,6 +129,7 @@ export default function InteractiveList(props) {
       if (secret.state === "accepted") {
         return (
           <Button
+            className={classes.buttons}
             variant="outlined"
             color="primary"
             href={`/recombine/${secret.k}`}
@@ -122,6 +141,7 @@ export default function InteractiveList(props) {
       }
       return (
         <Button
+          className={classes.buttons}
           variant="outlined"
           color="primary"
           id="recover"
@@ -135,6 +155,7 @@ export default function InteractiveList(props) {
       if (secret.state === "accepted") {
         return (
           <Button
+            className={classes.buttons}
             variant="outlined"
             color="primary"
             href="#outlined-buttons"
@@ -146,6 +167,7 @@ export default function InteractiveList(props) {
       }
       return (
         <Button
+          className={classes.buttons}
           variant="outlined"
           color="primary"
           href="#outlined-buttons"
@@ -160,6 +182,7 @@ export default function InteractiveList(props) {
       if (secret.state === "accepted") {
         return (
           <Button
+            className={classes.buttons}
             variant="outlined"
             color="primary"
             href="#outlined-buttons"
@@ -171,6 +194,7 @@ export default function InteractiveList(props) {
       }
       return (
         <Button
+          className={classes.buttons}
           variant="outlined"
           color="primary"
           id="accept"
@@ -204,24 +228,7 @@ export default function InteractiveList(props) {
                   primary="Secret name"
                   secondary={props.secret.secretName}
                 />
-                <ListItemSecondaryAction>
-                  {props.list_for === "recovery_requests" ? (
-                    <TextField
-                      variant="outlined"
-                      margin="normal"
-                      required
-                      fullWidth
-                      name="shard"
-                      label="Shard"
-                      id="shard"
-                      onChange={(e) => {
-                        setShard(e.target.value);
-                      }}
-                    />
-                  ) : (
-                    get_button_by_list_type(props.list_for, props.secret, shard)
-                  )}
-                </ListItemSecondaryAction>
+                <ListItemSecondaryAction></ListItemSecondaryAction>
               </ListItem>
               <ListItem id="secretId">
                 <ListItemAvatar>
@@ -230,17 +237,6 @@ export default function InteractiveList(props) {
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText primary="secretId" secondary={props.secret._id} />
-                <ListItemSecondaryAction>
-                  {props.list_for === "recovery_requests" ? (
-                    get_button_by_list_type(
-                      "recovery_requests_accept",
-                      props.secret,
-                      shard
-                    )
-                  ) : (
-                    <></>
-                  )}
-                </ListItemSecondaryAction>
               </ListItem>
               <ListItem id="participants">
                 <ListItemAvatar>
@@ -249,17 +245,6 @@ export default function InteractiveList(props) {
                   </Avatar>
                 </ListItemAvatar>
                 <MouseOverPopover content={participants} />
-                <ListItemSecondaryAction>
-                  {props.list_for === "recovery_requests" ? (
-                    get_button_by_list_type(
-                      "recovery_requests_reject",
-                      props.secret,
-                      shard
-                    )
-                  ) : (
-                    <></>
-                  )}
-                </ListItemSecondaryAction>
               </ListItem>
               <ListItem id="date">
                 <ListItemAvatar>
@@ -268,6 +253,46 @@ export default function InteractiveList(props) {
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText primary="Date" secondary={props.secret.date} />
+              </ListItem>
+              <ListItem>
+                {props.list_for === "recovery_requests" ? (
+                  <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="shard"
+                    label="Shard"
+                    id="shard"
+                    onChange={(e) => {
+                      setShard(e.target.value);
+                    }}
+                    className={classes.shardText}
+                  />
+                ) : (
+                  get_button_by_list_type(props.list_for, props.secret, shard)
+                )}
+              </ListItem>
+              <ListItem>
+                {props.list_for === "recovery_requests" ? (
+                  get_button_by_list_type(
+                    "recovery_requests_accept",
+                    props.secret,
+                    shard
+                  )
+                ) : (
+                  <></>
+                )}
+
+                {props.list_for === "recovery_requests" ? (
+                  get_button_by_list_type(
+                    "recovery_requests_reject",
+                    props.secret,
+                    shard
+                  )
+                ) : (
+                  <></>
+                )}
               </ListItem>
             </List>
           </div>
