@@ -179,11 +179,11 @@ export default function HorizontalLinearStepper(props) {
                     "Sending emails successful! The secret has been reshared."
                   );
                 })
-              ).catch(() => {
+              ).catch((res) => {
                 toast.error("There was some error. Try again.");
               });
             })
-            .catch(() => {
+            .catch((res) => {
               toast.error("There was some error. Try again.");
             })
         );
@@ -192,12 +192,10 @@ export default function HorizontalLinearStepper(props) {
         trackPromise(
           createSecret(formData)
             .then((res) => {
-              toast.success(
-                "Sending emails successful! The secret has been shared."
-              );
+              toast.success(res.data.message);
             })
-            .catch(() => {
-              toast.error("There was some error. Try again.");
+            .catch((res) => {
+              toast.error(res.response.data.message);
             })
         );
       }
@@ -210,8 +208,6 @@ export default function HorizontalLinearStepper(props) {
 
   const handleSkip = () => {
     if (!isStepOptional(activeStep)) {
-      // You probably want to guard against something like this,
-      // it should never occur unless someone's actively trying to break something.
       throw new Error("You can't skip a step that isn't optional.");
     }
 
@@ -235,7 +231,11 @@ export default function HorizontalLinearStepper(props) {
   };
   return (
     <div className={classes.root}>
-      <Stepper activeStep={activeStep} orientation="vertical">
+      <Stepper
+        activeStep={activeStep}
+        orientation="vertical"
+        style={{ backgroundColor: "transparent" }}
+      >
         {steps.map((label, index) => {
           const stepProps = {};
           const labelProps = {};
