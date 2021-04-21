@@ -30,7 +30,12 @@ export default function ShowSecret(props) {
         alignItems: "center",
       }}
     >
-      <Button variant="contained" color="secondary" onClick={handleClickOpen}>
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={handleClickOpen}
+        style={{ marginTop: "4rem" }}
+      >
         Show Secret
       </Button>
       <Dialog

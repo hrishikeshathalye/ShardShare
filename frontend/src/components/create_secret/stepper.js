@@ -9,7 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import { Box, Container } from "@material-ui/core";
 import { trackPromise } from "react-promise-tracker";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { createSecret, deleteRequests } from "../../api/index";
@@ -172,19 +172,17 @@ export default function HorizontalLinearStepper(props) {
         trackPromise(
           deleteRequests(formData._id)
             .then((res) => {
-              toast.success("Deleted all pending requests on this secret.");
+              toast.success(res.data.message);
               trackPromise(
                 createSecret(formData).then((res) => {
-                  toast.success(
-                    "Sending emails successful! The secret has been reshared."
-                  );
+                  toast.success(res.data.message);
                 })
               ).catch((res) => {
-                toast.error("There was some error. Try again.");
+                toast.error(res.response.data.message);
               });
             })
             .catch((res) => {
-              toast.error("There was some error. Try again.");
+              toast.error(res.response.data.message);
             })
         );
         ref.current = 0;
@@ -265,7 +263,6 @@ export default function HorizontalLinearStepper(props) {
             >
               Reset
             </Button>
-            <ToastContainer position="bottom-center" />
           </div>
         ) : (
           <div>

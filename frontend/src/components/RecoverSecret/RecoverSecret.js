@@ -31,18 +31,16 @@ export default function RecoverSecret() {
   var [og_secret, setSecret] = useState("");
   const handleChange = (e, index) => {
     k_thresh[index] = e.target.value;
-    console.log(k_thresh);
   };
   const handleRegenerate = () => {
     trackPromise(
       combineShards(k_thresh)
         .then((res) => {
-          console.log(res);
           setSecret(res.data.combinedSecret);
           toast.success("Recombined Successfully!");
         })
-        .catch(() => {
-          toast.failure("Some Error Occured");
+        .catch((res) => {
+          toast.failure(res.response.data.message);
         })
     );
   };
@@ -63,23 +61,19 @@ export default function RecoverSecret() {
   ));
   return (
     <Container>
-      <Box
-        display="flex"
-        justifyContent="center"
-        m={1}
-        p={1}
-        bgcolor="background.paper"
-      >
+      <Box display="flex" justifyContent="center" m={1} p={1}>
         <Typography variant="h4" gutterBottom>
           Recombine Shards
         </Typography>
       </Box>
-      {part_textboxes}
+      <div id="secret_texts">{part_textboxes}</div>
+
       <Button
         variant="outlined"
         color="primary"
         style={{ marginTop: "1rem" }}
         onClick={() => handleRegenerate()}
+        id="generate"
       >
         Generate original Key
       </Button>

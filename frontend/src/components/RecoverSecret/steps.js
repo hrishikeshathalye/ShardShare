@@ -3,42 +3,22 @@ var arr = [
   {
     id: "first",
     attachTo: {
-      element: "#createSecret",
+      element: "#secret_texts",
       on: "bottom",
     },
-    title: "Creating A New Secret",
+    title: "Input shards",
     text:
-      "Use this menu if you want to use a new secret. This menu will ask you for the secret name, the secret and the participants.",
+      "Input all the shards you have received on email due to acceptance of your request by participants of the secret.",
   },
   {
     id: "second",
     attachTo: {
-      element: "#yourSecrets",
+      element: "#generate",
       on: "bottom",
     },
-    title: "Viewing Secrets Shared By You",
+    title: "Generate original secret.",
     text:
-      "This menu contains all the sccrets that you have shared with others so you can keep track what you have shared or modify and reshare the secret.",
-  },
-  {
-    id: "third",
-    attachTo: {
-      element: "#sharedWithYou",
-      on: "bottom",
-    },
-    title: "Viewing Secrets Shared With You",
-    text:
-      "This menu contains all the secrets shared with you by others, you can also request recovery of a key from here.",
-  },
-  {
-    id: "fourth",
-    attachTo: {
-      element: "#recoveryRequests",
-      on: "bottom",
-    },
-    title: "Viewing All Pending Recovery Requests",
-    text:
-      "This menu shows all the recovery requests pending to be approved/rejected by you. These are keys that other people want to recover.",
+      "Using the shards you have entered, the original secret will be regenrated and you'll be able to view it!",
   },
 ];
 function createSteps(arr) {
@@ -83,4 +63,4 @@ function createSteps(arr) {
   }
 }
 createSteps(arr);
-exports.dashboardSteps = steps;
+exports.recombineSteps = steps;

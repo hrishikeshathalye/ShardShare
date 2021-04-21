@@ -3,11 +3,7 @@ import { pink } from "@material-ui/core/colors";
 
 export default makeStyles((theme) => ({
   appBar: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "10px 40px",
+    background: "#616161 !important",
   },
   heading: {
     color: "black",
@@ -15,7 +11,7 @@ export default makeStyles((theme) => ({
   },
   link: {
     textDecoration: "none !important",
-    color: "black !important",
+    color: "white !important",
   },
   image: {
     marginLeft: "15px",

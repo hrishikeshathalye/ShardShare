@@ -68,11 +68,10 @@ exports.request = async (req, res) => {
           ${footer}`;
       ret = await sendMail(subject, body, secret.sharedWith[i]);
     }
-    res.status(200).json({ result: "Success" });
-    // res.status(200).json({result: existingUser, token});
+    res.status(200).json({ message: "Recovery Request Initiated" });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Something went wrong" });
+    res.status(500).json({ message: "Something went wrong. Try again." });
   }
 };
 
@@ -107,10 +106,10 @@ exports.approve = async (req, res) => {
         n, k : ${secret.n}, ${secret.k}\n
         ${footer}`;
     ret = await sendMail(subject, body, requester);
-    res.status(200).json({ message: "Success" });
+    res.status(200).json({ message: "Recovery Request Accepted!" });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Something went wrong" });
+    res.status(500).json({ message: "Something went wrong. Try again." });
   }
 };
 
@@ -137,9 +136,9 @@ exports.reject = async (req, res) => {
     // if (numRejected > secret.n - secret.k) {
     //   await recoveryRequest.deleteOne({ _id: request._id });
     // }
-    res.status(200).json({ message: "Success" });
+    res.status(200).json({ message: "Recovery Request Rejected!" });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    res.status(500).json({ message: "Something went wrong. Try again." });
   }
 };
 
@@ -149,13 +148,15 @@ exports.getRecoveryRequests = async (req, res) => {
   const secretCreator = decodedData.email;
   let secrets = [];
   requests = await recoveryRequest.find({});
-  // console.log(requests);
   for (let i = 0; i < requests.length; i++) {
     var tmp = await Secret.find({
       _id: requests[i].secretId,
       sharedWith: secretCreator,
     });
     tmp = tmp[0];
+    if (tmp === undefined) {
+      continue;
+    }
     let numRejected = requests[i].declined.length;
     let numAccepted = requests[i].approved.length;
     if (
@@ -183,6 +184,7 @@ exports.getRecoveryRequests = async (req, res) => {
 };
 
 exports.combineShards = async (req, res) => {
+  console.log(req.body);
   try {
     const shardArray = req.body.shardArray;
     for (let i = 0; i < shardArray.length; i++) {
@@ -193,15 +195,15 @@ exports.combineShards = async (req, res) => {
     res.status(200).json({ combinedSecret: recovered });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Some Error Occured" });
+    res.status(500).json({ message: "Something went wrong. Try again." });
   }
 };
 
 exports.deleteRequests = async (req, res) => {
   try {
     const secretId = req.body.secretId;
-    await recoveryRequest.deleteMany({secretId: secretId});
-    res.status(200).json({ message : "Successfully deleted recovery requests"});
+    await recoveryRequest.deleteMany({ secretId: secretId });
+    res.status(200).json({ message: "Successfully deleted recovery requests" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Some Error Occured" });

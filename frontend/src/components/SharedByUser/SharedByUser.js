@@ -4,7 +4,7 @@ import List from "../List/List";
 import Box from "@material-ui/core/Box";
 import { Typography, Container } from "@material-ui/core";
 import { getSharedByUser } from "../../api/index";
-import { trackPromise } from 'react-promise-tracker';
+import { trackPromise } from "react-promise-tracker";
 const useStyles = makeStyles({
   root: {
     flexGrow: 1,
@@ -20,29 +20,32 @@ export default function SharedWithUser(props) {
   const [secrets, setSecrets] = useState([]);
   useEffect(() => {
     trackPromise(
-      getSharedByUser().then((res) => {
-        setSecrets(res.data.secret_array);
-      })
+      getSharedByUser()
+        .then((res) => {
+          setSecrets(res.data.secret_array);
+        })
+        .catch((res) => {
+          alert(res.response.data.message);
+        })
     );
   }, []);
   return (
     <Container>
-      <Box
-        display="flex"
-        justifyContent="center"
-        m={1}
-        p={1}
-        bgcolor="background.paper"
-      >
+      <Box display="flex" justifyContent="center" m={1} p={1}>
         <Typography variant="h4" gutterBottom>
           Secrets Shared By You
         </Typography>
       </Box>
-      {secrets.length === 0 ? 
-      <Box margin="5rem" display="flex" justifyContent="center">
-      <Typography variant="h6" gutterBottom> No Secrets Created Yet... </Typography>
-      </Box>:
-      <List listItems={secrets} list_for={"shared_by_user"} />}
+      {secrets.length === 0 ? (
+        <Box margin="5rem" display="flex" justifyContent="center">
+          <Typography variant="h6" gutterBottom>
+            {" "}
+            No Secrets Created Yet...{" "}
+          </Typography>
+        </Box>
+      ) : (
+        <List listItems={secrets} list_for={"shared_by_user"} />
+      )}
     </Container>
   );
 }

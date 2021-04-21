@@ -1,12 +1,24 @@
 import React, { useState, useEffect, useContext } from "react";
-import { AppBar, Typography, Toolbar, Avatar, Menu, MenuItem, IconButton } from "@material-ui/core";
-import MoreIcon from '@material-ui/icons/MoreVert';
+import {
+  AppBar,
+  Typography,
+  Toolbar,
+  Avatar,
+  Menu,
+  MenuItem,
+  IconButton,
+  Badge,
+  Tooltip,
+} from "@material-ui/core";
+import MoreIcon from "@material-ui/icons/MoreVert";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import decode from "jwt-decode";
 import * as actionType from "../../constants/actionTypes";
 import useStyles from "./styles";
-import { ShepherdTour, ShepherdTourContext} from "react-shepherd";
+import { ShepherdTour, ShepherdTourContext } from "react-shepherd";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import HelpIcon from "@material-ui/icons/Help";
 import getSteps from "./getSteps";
 
 const tourOptions = {
@@ -33,11 +45,26 @@ const Navbar = () => {
   };
   function TourButton() {
     const tour = useContext(ShepherdTourContext);
-    return (
-      <MenuItem onClick={()=>{
-        handleMobileMenuClose();
-        tour.start();
-      }}>
+    return !isMobileMenuOpen ? (
+      <Tooltip title="View page tour." aria-label="add">
+        <IconButton color="inherit">
+          <Badge color="secondary">
+            <HelpIcon
+              onClick={() => {
+                handleMobileMenuClose();
+                tour.start();
+              }}
+            />
+          </Badge>
+        </IconButton>
+      </Tooltip>
+    ) : (
+      <MenuItem
+        onClick={() => {
+          handleMobileMenuClose();
+          tour.start();
+        }}
+      >
         View Page Tour
       </MenuItem>
     );
@@ -50,39 +77,37 @@ const Navbar = () => {
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
       id={"menu-mobile"}
       keepMounted
-      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      transformOrigin={{ vertical: "top", horizontal: "right" }}
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
       {user?.result ? (
-          <div>
-            <MenuItem>
-              <Avatar
-                className={classes.pink}
-                alt={user?.result.name}
-                src={user?.result.imageUrl}
-              >
-                {user?.result.name.charAt(0)}
-              </Avatar>
-              <Typography variant="h6">
-                {user?.result.name}
-              </Typography>
-            </MenuItem>
-            <ShepherdTour steps={getSteps()} tourOptions={tourOptions}>
-              <TourButton />
-            </ShepherdTour>
-            <MenuItem onClick={logout}>Logout</MenuItem>
-          </div>
-        ) : (
+        <div>
           <MenuItem>
-            <Link to="/auth" class={classes.link}>
-              Sign In / Register
-            </Link>
+            <Avatar
+              className={classes.pink}
+              alt={user?.result.name}
+              src={user?.result.imageUrl}
+            >
+              {user?.result.name.charAt(0)}
+            </Avatar>
+            <Typography variant="h6">{user?.result.name}</Typography>
           </MenuItem>
-        )}
+          <ShepherdTour steps={getSteps()} tourOptions={tourOptions}>
+            <TourButton />
+          </ShepherdTour>
+          <MenuItem onClick={logout}>Logout</MenuItem>
+        </div>
+      ) : (
+        <MenuItem>
+          <Link to="/auth" style={{ color: "black" }}>
+            Sign In / Register
+          </Link>
+        </MenuItem>
+      )}
     </Menu>
   );
 
@@ -99,56 +124,59 @@ const Navbar = () => {
   }, [location]);
 
   return (
-    <div className={classes.grow} style={{position:"static", marginBottom:"6rem"}}>
-      <AppBar>
+    <div
+      className={classes.grow}
+      style={{ position: "static", marginBottom: "6rem" }}
+    >
+      <AppBar className={classes.appBar}>
         <Toolbar>
-        <Typography
-          className={classes.heading}
-          variant="h5"
-          align="center"
-        >
-          <Link to="/" className={classes.link}>ShardShare</Link>
-        </Typography>
-        <div className={classes.grow} />
-        <div className={classes.sectionDesktop}>
-        {user?.result ? (
-          <div className={classes.profile}>
-            <MenuItem>
-              <Avatar
-                className={classes.pink}
-                alt={user?.result.name}
-                src={user?.result.imageUrl}
-              >
-                {user?.result.name.charAt(0)}
-              </Avatar>
-              <Typography variant="h6">
-                {user?.result.name}
-              </Typography>
-            </MenuItem>
-            <ShepherdTour steps={getSteps()} tourOptions={tourOptions}>
-              <TourButton />
-            </ShepherdTour>
-            <MenuItem onClick={logout}>Logout</MenuItem>
-          </div>
-        ) : (
-            <Link to="/auth" class={classes.link}>
-            <MenuItem>
-              Sign In / Register
-            </MenuItem>
+          <Typography className={classes.heading} variant="h5" align="center">
+            <Link to="/" className={classes.link}>
+              ShardShare
             </Link>
-        )}
-        </div>
-        <div className={classes.sectionMobile}>
-          <IconButton
-            aria-label="show more"
-            aria-controls={"menu-mobile"}
-            aria-haspopup="true"
-            onClick={handleMobileMenuOpen}
-            color="inherit"
-          >
-            <MoreIcon />
-          </IconButton>
-        </div>
+          </Typography>
+          <div className={classes.grow} />
+          <div className={classes.sectionDesktop}>
+            {user?.result ? (
+              <div className={classes.profile}>
+                <MenuItem>
+                  <Avatar
+                    className={classes.pink}
+                    alt={user?.result.name}
+                    src={user?.result.imageUrl}
+                  >
+                    {user?.result.name.charAt(0)}
+                  </Avatar>
+                  <Typography variant="h6">{user?.result.name}</Typography>
+                </MenuItem>
+                <ShepherdTour steps={getSteps()} tourOptions={tourOptions}>
+                  <TourButton />
+                </ShepherdTour>
+                <Tooltip title="Logout" aria-label="add">
+                  <IconButton color="inherit">
+                    <Badge color="secondary">
+                      <ExitToAppIcon onClick={logout} />
+                    </Badge>
+                  </IconButton>
+                </Tooltip>
+              </div>
+            ) : (
+              <Link to="/auth" class={classes.link}>
+                <MenuItem>Sign In / Register</MenuItem>
+              </Link>
+            )}
+          </div>
+          <div className={classes.sectionMobile}>
+            <IconButton
+              aria-label="show more"
+              aria-controls={"menu-mobile"}
+              aria-haspopup="true"
+              onClick={handleMobileMenuOpen}
+              color="inherit"
+            >
+              <MoreIcon />
+            </IconButton>
+          </div>
         </Toolbar>
       </AppBar>
       {renderMobileMenu}

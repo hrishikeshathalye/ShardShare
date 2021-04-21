@@ -6,9 +6,8 @@ var arr = [
       element: "#test0",
       on: "bottom",
     },
-    title: "Creating A New Secret",
-    text:
-      "Use this menu if you want to use a new secret. This menu will ask you for the secret name, the secret and the participants.",
+    title: "Secret Name",
+    text: "Give any name you like to your secret.",
   },
   {
     id: "second",
@@ -16,9 +15,9 @@ var arr = [
       element: "#test1",
       on: "bottom",
     },
-    title: "Viewing Secrets Shared By You",
+    title: "Enter Secret",
     text:
-      "This menu contains all the sccrets that you have shared with others so you can keep track what you have shared or modify and reshare the secret.",
+      "Enter the secret you want to share here. We value your privacy and do not share any secret on our servers, the key shards are sent to participants directly through email.",
   },
   {
     id: "third",
@@ -26,9 +25,9 @@ var arr = [
       element: "#test2",
       on: "bottom",
     },
-    title: "Viewing Secrets Shared With You",
+    title: "Enter Threshold Values",
     text:
-      "This menu contains all the secrets shared with you by others, you can also request recovery of a key from here.",
+      "'n' is the total number of people you want to add as participants of this secret and 'k' is the minimum number of people who have to accept the request in order to recover the secret.",
   },
   {
     id: "fourth",
@@ -36,19 +35,9 @@ var arr = [
       element: "#test3",
       on: "bottom",
     },
-    title: "Viewing All Pending Recovery Requests",
+    title: "Add Participants",
     text:
-      "This menu shows all the recovery requests pending to be approved/rejected by. These are keys that other people want to recover.",
-  },
-  {
-    id: "fifth",
-    attachTo: {
-      element: "#emails",
-      on: "bottom",
-    },
-    title: "Viewing All Pending Recovery Requests",
-    text:
-      "This menu shows all the recovery requests pending to be approved/rejected by. These are keys that other people want to recover.",
+      "Add the email ids of the people you want to share the secret with in this step.",
   },
 ];
 function createSteps(arr) {
@@ -86,12 +75,8 @@ function createSteps(arr) {
       title: arr[i].title,
       text: arr[i].text,
       when: {
-        show: () => {
-          console.log("show step");
-        },
-        hide: () => {
-          console.log("hide step");
-        },
+        show: () => {},
+        hide: () => {},
       },
     };
     steps.push(tmp);

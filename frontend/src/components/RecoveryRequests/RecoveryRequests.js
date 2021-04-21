@@ -20,30 +20,31 @@ export default function RecoveryRequests(props) {
   const [secrets, setSecrets] = useState([]);
   useEffect(() => {
     trackPromise(
-      getRecoveryRequests().then((res) => {
-        console.log(res.data.secret_array);
-        setSecrets(res.data.secret_array);
-      })
+      getRecoveryRequests()
+        .then((res) => {
+          setSecrets(res.data.secret_array);
+        })
+        .catch((res) => {
+          alert(res.response.data.message);
+        })
     );
   }, []);
   return (
     <Container>
-      <Box
-        display="flex"
-        justifyContent="center"
-        m={1}
-        p={1}
-        bgcolor="background.paper"
-      >
+      <Box display="flex" justifyContent="center" m={1} p={1}>
         <Typography variant="h4" gutterBottom>
           Recovery Requests
         </Typography>
       </Box>
-      {secrets.length === 0 ? 
-      <Box margin="5rem" display="flex" justifyContent="center">
-      <Typography variant="h6" gutterBottom> No Pending Requests... </Typography>
-      </Box>
-      : <List listItems={secrets} list_for={"recovery_requests"} />}
+      {secrets.length === 0 ? (
+        <Box margin="5rem" display="flex" justifyContent="center">
+          <Typography variant="h6" gutterBottom>
+            No Pending Requests...
+          </Typography>
+        </Box>
+      ) : (
+        <List listItems={secrets} list_for={"recovery_requests"} />
+      )}
     </Container>
   );
 }

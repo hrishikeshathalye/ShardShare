@@ -95,6 +95,12 @@
   margin-top: 60px;
 }
 
+@media only screen and (max-width: 1026px) {
+  .showcase-img {
+    display: none;
+  }
+}
+
 .start-two {
   background-color: #372f7f;
   color: white;

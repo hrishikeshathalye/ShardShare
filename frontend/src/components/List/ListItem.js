@@ -20,7 +20,7 @@ import {
   approveRequest,
   rejectRequest,
 } from "../../api/index.js";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import TextField from "@material-ui/core/TextField";
 
 toast.configure();
@@ -50,30 +50,28 @@ export default function InteractiveList(props) {
   const [shard, setShard] = React.useState(false);
   const history = useHistory();
   const handleRecover = (secret) => {
-    console.log(secret._id);
     trackPromise(
       recoverSecret(secret._id)
-        .then(() => {
-          toast.success("Recovery Request Initiated");
+        .then((res) => {
+          toast.success(res.data.message);
           window.location.reload(false);
         })
-        .catch(() => {
-          toast.failure("Some Error Occured");
+        .catch((res) => {
+          toast.failure(res.response.data.message);
           window.location.reload(false);
         })
     );
   };
 
   const handleReject = (secret) => {
-    console.log(secret.requester);
     trackPromise(
       rejectRequest(secret._id, secret.requester)
-        .then(() => {
-          toast.warning("Recovery Request Rejected!");
+        .then((res) => {
+          toast.warning(res.data.message);
           window.location.reload(false);
         })
-        .catch(() => {
-          toast.failure("Some Error Occured");
+        .catch((res) => {
+          toast.failure(res.response.data.message);
           window.location.reload(false);
         })
     );
@@ -84,15 +82,14 @@ export default function InteractiveList(props) {
   };
 
   const handleAccept = (secret, shard) => {
-    console.log(secret);
     trackPromise(
       approveRequest(secret._id, secret.requester, shard)
-        .then(() => {
-          toast.success("Recovery Request Accepted!");
+        .then((res) => {
+          toast.success(res.data.message);
           window.location.reload(false);
         })
-        .catch(() => {
-          toast.failure("Some Error Occured");
+        .catch((res) => {
+          toast.failure(res.response.data.message);
           window.location.reload(false);
         })
     );
@@ -120,6 +117,7 @@ export default function InteractiveList(props) {
             variant="outlined"
             id="requestPending"
             color="primary"
+            id="recover"
             disabled
           >
             Request Pending
@@ -133,7 +131,7 @@ export default function InteractiveList(props) {
             variant="outlined"
             color="primary"
             href={`/recombine/${secret.k}`}
-            id="recombine"
+            id="recover"
           >
             Recombine Secret
           </Button>
