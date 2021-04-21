@@ -21,7 +21,6 @@ export default function SharedWithUser(props) {
   useEffect(() => {
     trackPromise(
       getSharedByUser().then((res) => {
-        //console.log(res.data.secret_array);
         setSecrets(res.data.secret_array);
       })
     );

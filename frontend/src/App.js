@@ -35,12 +35,8 @@ function App() {
   }, []);
   return (
     <BrowserRouter>
-      <div className={classes.root}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Navbar />
-          </Grid>
-          <Grid item xs={12}>
+      <div>
+          <Navbar />
             {isVerified ? (
               <Switch>
                 <Route exact path="/dashboard" component={Dashboard} />
@@ -65,8 +61,6 @@ function App() {
                 <Route path="/" component={Home} />
               </Switch>
             )}
-          </Grid>
-        </Grid>
       </div>
     </BrowserRouter>
   );

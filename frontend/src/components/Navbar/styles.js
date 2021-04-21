@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
-import { deepPurple } from '@material-ui/core/colors';
+import { pink } from '@material-ui/core/colors';
 
 export default makeStyles((theme) => ({
   appBar: {
@@ -11,31 +11,59 @@ export default makeStyles((theme) => ({
   },
   heading: {
     color: 'black',
-    textDecoration: 'none',
+    textDecoration: 'none'
+  },
+  link:{
+    textDecoration: 'none !important',
+    color: 'white !important'
   },
   image: {
     marginLeft: '15px',
   },
-  toolbar: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    width: '400px',
-  },
   profile: {
     display: 'flex',
     justifyContent: 'space-between',
-    width: '400px',
   },
-  userName: {
+  pink: {
+    color: theme.palette.getContrastText(pink[500]),
+    backgroundColor: pink[500],
+    margin:"0.5rem"
+  },
+  grow: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    display: 'none',
+    [theme.breakpoints.up('sm')]: {
+      display: 'block',
+    },
+  },
+  inputRoot: {
+    color: 'inherit',
+  },
+  inputInput: {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: '20ch',
+    },
+  },
+  sectionDesktop: {
+    display: 'none',
+    [theme.breakpoints.up('md')]: {
+      display: 'flex',
+    },
+  },
+  sectionMobile: {
     display: 'flex',
-    alignItems: 'center',
-  },
-  brandContainer: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  purple: {
-    color: theme.palette.getContrastText(deepPurple[500]),
-    backgroundColor: deepPurple[500],
-  },
+    [theme.breakpoints.up('md')]: {
+      display: 'none',
+    },
+  }
 }));

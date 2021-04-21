@@ -14,7 +14,7 @@ function Content() {
                             while also protecting against unauthorized access!
                         </h6>
                         <br />
-                        <h6><a className="btn btn-dark start start-two" href="#">View Documentation</a></h6> <br />
+                        <h6><a className="btn btn-dark start start-two" href="https://pdfhost.io/v/sDvKsuDMG_SRSpdf.pdf">View Documentation</a></h6> <br />
                         <h6><a className="btn btn-dark start start-two" href="https://github.com/hrishikeshathalye/ShardShare">GitHub <i className="fab fa-github"></i></a></h6> <br />
                     </div>
                     <div className="col-sm-3 talk">

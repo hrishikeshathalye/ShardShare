@@ -132,7 +132,7 @@ function getStepContent(step, handleChange) {
         </Container>
       );
     case 3:
-      return <Box>{part_textboxes}</Box>;
+      return <Box id="emails">{part_textboxes}</Box>;
     default:
       return "Unknown step";
   }

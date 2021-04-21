@@ -95,7 +95,7 @@ export default function InteractiveList(props) {
   const get_button_by_list_type = (type, secret, shard) => {
     if (type === "shared_by_user") {
       return (
-        <Button variant="outlined" color="primary" onClick={() => handleReshare(secret)}>
+        <Button variant="outlined" id="reshare" color="primary" onClick={() => handleReshare(secret)}>
           Modify & Reshare
         </Button>
       );
@@ -103,7 +103,7 @@ export default function InteractiveList(props) {
     if (type === "shared_with_user") {
       if (secret.state === "pending") {
         return (
-          <Button variant="outlined" color="primary" disabled>
+          <Button variant="outlined" id="requestPending" color="primary" disabled>
             Request Pending
           </Button>
         );
@@ -114,6 +114,7 @@ export default function InteractiveList(props) {
             variant="outlined"
             color="primary"
             href={`/recombine/${secret.k}`}
+            id="recombine"
           >
             Recombine Secret
           </Button>
@@ -123,6 +124,7 @@ export default function InteractiveList(props) {
         <Button
           variant="outlined"
           color="primary"
+          id="recover"
           onClick={() => handleRecover(secret)}
         >
           Recover
@@ -147,6 +149,7 @@ export default function InteractiveList(props) {
           variant="outlined"
           color="primary"
           href="#outlined-buttons"
+          id="reject"
           onClick={() => handleReject(secret)}
         >
           Reject
@@ -170,6 +173,7 @@ export default function InteractiveList(props) {
         <Button
           variant="outlined"
           color="primary"
+          id="accept"
           onClick={() => handleAccept(secret, shard)}
         >
           Accept
@@ -186,11 +190,11 @@ export default function InteractiveList(props) {
   });
   return (
     <div className={classes.root}>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} xs={12}>
         <Grid item xs={12} md={12}>
           <div className={classes.list}>
             <List dense={dense}>
-              <ListItem>
+              <ListItem id="secretName">
                 <ListItemAvatar>
                   <Avatar>
                     <VpnKeyIcon />
@@ -219,7 +223,7 @@ export default function InteractiveList(props) {
                   )}
                 </ListItemSecondaryAction>
               </ListItem>
-              <ListItem>
+              <ListItem id="secretId">
                 <ListItemAvatar>
                   <Avatar>
                     <FormatListNumberedIcon />
@@ -238,7 +242,7 @@ export default function InteractiveList(props) {
                   )}
                 </ListItemSecondaryAction>
               </ListItem>
-              <ListItem>
+              <ListItem id="participants">
                 <ListItemAvatar>
                   <Avatar>
                     <PersonAddIcon />
@@ -257,7 +261,7 @@ export default function InteractiveList(props) {
                   )}
                 </ListItemSecondaryAction>
               </ListItem>
-              <ListItem>
+              <ListItem id="date">
                 <ListItemAvatar>
                   <Avatar>
                     <EventIcon />

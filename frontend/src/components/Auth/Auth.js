@@ -65,7 +65,7 @@ const SignUp = () => {
         </Avatar>
         <Typography component="h1" variant="h5">{ isSignup ? 'Sign up' : 'Sign in' }</Typography>
         <form className={classes.form} onSubmit={handleSubmit}>
-          <Grid container spacing={2}>
+          <Grid container spacing={2} xs={12}>
             { isSignup && (
             <>
               <Input name="firstName" label="First Name" handleChange={handleChange} autoFocus half />
