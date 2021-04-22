@@ -10,10 +10,12 @@ import Typography from "@material-ui/core/Typography";
 import { Link, useHistory, useLocation } from "react-router-dom";
 const useStyles = makeStyles({
   root: {
-    width: 345,
+    width: 300,
+    borderRadius: "10px",
   },
   media: {
-    height: 140,
+    height: "140px",
+    width: "140px",
   },
 });
 
@@ -28,11 +30,19 @@ export default function MasterCard(props) {
       to={props.link}
     >
       <CardActionArea>
-        <CardMedia
-          className={classes.media}
-          image={props.image}
-          title={props.title}
-        />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "0.5rem",
+          }}
+        >
+          <CardMedia
+            className={classes.media}
+            image={props.image}
+            title={props.title}
+          />
+        </div>
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
             {props.title}
