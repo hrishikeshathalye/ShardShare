@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import Logo from "./logo.png"
 import {
   AppBar,
   Typography,
@@ -46,7 +47,7 @@ const Navbar = () => {
   function TourButton() {
     const tour = useContext(ShepherdTourContext);
     return !isMobileMenuOpen ? (
-      <Tooltip title="View page tour." aria-label="add">
+      <Tooltip title="View page tour" aria-label="add">
         <IconButton color="inherit">
           <Badge color="secondary">
             <HelpIcon
@@ -130,9 +131,9 @@ const Navbar = () => {
     >
       <AppBar className={classes.appBar}>
         <Toolbar>
+          <img src={Logo} className={classes.logo} alt="app logo"/>
           <Typography className={classes.heading} variant="h5" align="center">
-            <Link to="/" className={classes.link}>
-              ShardShare
+            <Link to="/" className={classes.link}> ShardShare
             </Link>
           </Typography>
           <div className={classes.grow} />

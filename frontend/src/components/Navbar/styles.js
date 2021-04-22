@@ -2,12 +2,18 @@ import { makeStyles } from "@material-ui/core/styles";
 import { pink } from "@material-ui/core/colors";
 
 export default makeStyles((theme) => ({
+  logo:{
+    maxWidth:"5rem",
+    maxHeight:"2rem",
+    width: "auto",
+    height: "auto", margin:"0.5rem"
+  },
   appBar: {
     background: "#616161 !important",
   },
   heading: {
     color: "black",
-    textDecoration: "none",
+    textDecoration: "none"
   },
   link: {
     textDecoration: "none !important",

@@ -1,9 +1,7 @@
-var bcrypt = require("bcryptjs");
 var jwt = require("jsonwebtoken");
-const sss = require("shamirs-secret-sharing");
+const sss = require("secrets.js-grempe")
 const nodemailer = require("nodemailer");
 var Secret = require("../models/secret.js");
-const { PromiseProvider } = require("mongoose");
 var recoveryRequest = require("../models/recoveryRequest.js");
 
 const validateEmail = (email) => {
@@ -59,6 +57,9 @@ exports.create = async (req, res) => {
   const n = parseInt(formData.n);
   const k = parseInt(formData.k);
   const participants = formData.participants;
+  if(isNaN(n) || isNaN(k)){
+    return res.status(500).json({ message: "Either n or k is not a number, please check again" });
+  }
   if (n < k) {
     return res.status(500).json({ message: "n cannot be less than k" });
   }
@@ -103,12 +104,12 @@ exports.create = async (req, res) => {
         }
       );
     }
-    secret = Buffer.from(secret);
-    const shares = sss.split(secret, { shares: n, threshold: k });
+    let secretHex = sss.str2hex(secret);
+    const shares = sss.share(secretHex, n, k);
     for (let i = 0; i < shares.length; i++) {
       ret = await sendMail(
         participants[i],
-        shares[i].toString("hex"),
+        shares[i],
         result._id,
         secretCreator,
         formData

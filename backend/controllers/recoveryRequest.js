@@ -1,8 +1,7 @@
-var bcrypt = require("bcryptjs");
 var jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 var recoveryRequest = require("../models/recoveryRequest.js");
-const sss = require("shamirs-secret-sharing");
+const sss = require("secrets.js-grempe");
 var Secret = require("../models/secret.js");
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -184,15 +183,15 @@ exports.getRecoveryRequests = async (req, res) => {
 };
 
 exports.combineShards = async (req, res) => {
-  console.log(req.body);
   try {
     const shardArray = req.body.shardArray;
-    for (let i = 0; i < shardArray.length; i++) {
-      shardArray[i] = Buffer.from(shardArray[i], "hex");
-    }
-    let recovered = await sss.combine(shardArray);
-    recovered = recovered.toString();
-    res.status(200).json({ combinedSecret: recovered });
+    // for (let i = 0; i < shardArray.length; i++) {
+    //   shardArray[i] = Buffer.from(shardArray[i], "hex");
+    // }
+    let recovered = sss.combine(shardArray);
+    recovered = sss.hex2str(recovered);
+    // recovered = recovered.toString();
+    res.status(200).json({ combinedSecret: recovered, message:"Recombined Successfully!"});
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Something went wrong. Try again." });
@@ -203,7 +202,7 @@ exports.deleteRequests = async (req, res) => {
   try {
     const secretId = req.body.secretId;
     await recoveryRequest.deleteMany({ secretId: secretId });
-    res.status(200).json({ message: "Successfully deleted recovery requests" });
+    res.status(200).json({ message: "Successfully deleted pending recovery requests" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Some Error Occured" });
