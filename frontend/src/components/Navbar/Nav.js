@@ -161,7 +161,7 @@ const Navbar = () => {
                 </Tooltip>
               </div>
             ) : (
-              <Link to="/auth" class={classes.link}>
+              <Link to="/auth" className={classes.link}>
                 <MenuItem>Sign In / Register</MenuItem>
               </Link>
             )}

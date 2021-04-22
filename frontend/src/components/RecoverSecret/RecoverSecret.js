@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import List from "../List/List";
 import Box from "@material-ui/core/Box";
-import { useParams } from "react-router-dom";
 import { Typography } from "@material-ui/core";
 import { combineShards } from "../../api/index";
 import { trackPromise } from "react-promise-tracker";
@@ -11,7 +9,7 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Container from "@material-ui/core/Container";
 import ShowSecret from "./ShowSecret";
-toast.configure();
+
 const useStyles = makeStyles({
   root: {
     flexGrow: 1,
@@ -22,30 +20,32 @@ const useStyles = makeStyles({
   },
 });
 
-export default function RecoverSecret() {
-  var { k } = useParams();
-  var k_thresh = [];
-  for (let i = 0; i < k; i++) {
-    k_thresh.push("");
-  }
+export default function RecoverSecret(props) {
+  const [k, setk] = useState(props.match.params.k);
   var [og_secret, setSecret] = useState("");
+  const k_thresh = useRef([]);
+  if(k_thresh.current.length === 0){
+    for (let i = 0; i < k; i++) {
+      k_thresh.current.push("");
+    }
+  }
   const handleChange = (e, index) => {
-    k_thresh[index] = e.target.value;
+    k_thresh.current[index] = e.target.value;
   };
   const handleRegenerate = () => {
     trackPromise(
-      combineShards(k_thresh)
+      combineShards(k_thresh.current)
         .then((res) => {
           setSecret(res.data.combinedSecret);
-          toast.success("Recombined Successfully!");
+          toast.success(res.data.message);
         })
         .catch((res) => {
-          toast.failure(res.response.data.message);
+          toast.error(res.response.data.message);
         })
     );
   };
   const classes = useStyles();
-  const part_textboxes = k_thresh.map((number, index) => (
+  const part_textboxes = k_thresh.current.map((number, index) => (
     <TextField
       variant="outlined"
       margin="normal"

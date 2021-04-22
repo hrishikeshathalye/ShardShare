@@ -23,7 +23,6 @@ import {
 import { toast } from "react-toastify";
 import TextField from "@material-ui/core/TextField";
 
-toast.configure();
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -57,7 +56,7 @@ export default function InteractiveList(props) {
           window.location.reload(false);
         })
         .catch((res) => {
-          toast.failure(res.response.data.message);
+          toast.error(res.response.data.message);
           window.location.reload(false);
         })
     );
@@ -71,7 +70,7 @@ export default function InteractiveList(props) {
           window.location.reload(false);
         })
         .catch((res) => {
-          toast.failure(res.response.data.message);
+          toast.error(res.response.data.message);
           window.location.reload(false);
         })
     );
@@ -89,7 +88,7 @@ export default function InteractiveList(props) {
           window.location.reload(false);
         })
         .catch((res) => {
-          toast.failure(res.response.data.message);
+          toast.error(res.response.data.message);
           window.location.reload(false);
         })
     );
@@ -212,7 +211,7 @@ export default function InteractiveList(props) {
   });
   return (
     <div className={classes.root}>
-      <Grid container spacing={2} xs={12}>
+      <Grid container spacing={2}>
         <Grid item xs={12} md={12}>
           <div className={classes.list}>
             <List dense={dense}>

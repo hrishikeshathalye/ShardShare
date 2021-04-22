@@ -4,7 +4,7 @@ import { Avatar, Button, Paper, Grid, Typography, Container } from '@material-ui
 import { useHistory } from 'react-router-dom';
 import { GoogleLogin } from 'react-google-login';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-
+import {toast} from 'react-toastify'
 import Icon from './icon';
 import { signin, signup } from '../../actions/auth';
 import { AUTH } from '../../constants/actionTypes';
@@ -47,11 +47,11 @@ const SignUp = () => {
       dispatch({ type: AUTH, data: { result, token } });
       window.location = "/dashboard";
     } catch (error) {
-      alert("Some error occurred. Try again");
+      toast.error("Some error occurred. Try again");
     }
   };
 
-  const googleError = () => alert('Google Sign In was unsuccessful. Try again later');
+  const googleError = () => toast.error('Google Sign In was unsuccessful. Try again later');
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -65,7 +65,7 @@ const SignUp = () => {
         </Avatar>
         <Typography component="h1" variant="h5">{ isSignup ? 'Sign up' : 'Sign in' }</Typography>
         <form className={classes.form} onSubmit={handleSubmit}>
-          <Grid container spacing={2} xs={12}>
+          <Grid container spacing={2}>
             { isSignup && (
             <>
               <Input name="firstName" label="First Name" handleChange={handleChange} autoFocus half />

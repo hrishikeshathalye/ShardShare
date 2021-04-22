@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
   },
   bottomSpacing: {
-    marginBottom: "1rem",
+    padding: "1rem",
   },
 }));
 function Dashboard() {

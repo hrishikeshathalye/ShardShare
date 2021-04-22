@@ -5,6 +5,7 @@ import Box from "@material-ui/core/Box";
 import { Typography, Container } from "@material-ui/core";
 import { getSharedByUser } from "../../api/index";
 import { trackPromise } from "react-promise-tracker";
+import {toast} from 'react-toastify'
 const useStyles = makeStyles({
   root: {
     flexGrow: 1,
@@ -25,7 +26,7 @@ export default function SharedWithUser(props) {
           setSecrets(res.data.secret_array);
         })
         .catch((res) => {
-          alert(res.response.data.message);
+          toast.error(res.response.data.message);
         })
     );
   }, []);
