@@ -51,8 +51,13 @@ function getStepContent(step, handleChange) {
     formData.participants = Array(Number(formData.n)).fill("");
   else {
     let originaln = formData.participants.length;
-    for (let i = 0; i < parseInt(formData.n) - originaln; i++) {
-      formData.participants.push("");
+    for (let i = 0; i < Math.abs(parseInt(formData.n) - originaln); i++) {
+      if(parseInt(formData.n) > originaln){
+        formData.participants.push("");
+      }
+      else{
+        formData.participants.pop();
+      }
     }
   }
   const part_textboxes = formData.participants.map((number, index) => (
