@@ -1,3 +1,4 @@
+require('dotenv').config()
 var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
@@ -43,8 +44,7 @@ app.use(function (err, req, res, next) {
   res.json("error");
 });
 
-const mongoURL =
-  "mongodb://ShardShareUser:seproject123@shardshare-shard-00-00.1a5qt.mongodb.net:27017,shardshare-shard-00-01.1a5qt.mongodb.net:27017,shardshare-shard-00-02.1a5qt.mongodb.net:27017/ShardShare?ssl=true&replicaSet=atlas-vfiwm5-shard-0&authSource=admin&retryWrites=true&w=majority";
+const mongoURL = process.env.MONGO_URL;
 mongoose
   .connect(mongoURL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {

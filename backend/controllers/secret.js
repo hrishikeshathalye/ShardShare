@@ -1,23 +1,57 @@
+require('dotenv').config()
 var jwt = require("jsonwebtoken");
 const sss = require("secrets.js-grempe")
 const nodemailer = require("nodemailer");
 var Secret = require("../models/secret.js");
 var recoveryRequest = require("../models/recoveryRequest.js");
+const { google } = require("googleapis");
+const OAuth2 = google.auth.OAuth2;
 
 const validateEmail = (email) => {
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(email.toLowerCase());
 };
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: "seshardshare@gmail.com",
-    pass: "seproject123",
-  },
-});
+const createTransporter = async () => {
+  const oauth2Client = new OAuth2(
+    process.env.CLIENT_ID,
+    process.env.CLIENT_SECRET,
+    process.env.REDIRECT_URL
+  );
+
+  oauth2Client.setCredentials({
+    refresh_token: process.env.REFRESH_TOKEN
+  });
+
+  const accessToken = await new Promise((resolve, reject) => {
+    oauth2Client.getAccessToken((err, token) => {
+      if (err) {
+        reject("Failed to create access token :(");
+      }
+      resolve(token);
+    });
+  });
+  
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      type: "OAuth2",
+      user: process.env.EMAIL,
+      accessToken,
+      clientId: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET,
+      refreshToken: process.env.REFRESH_TOKEN
+    },
+    tls: {
+      rejectUnauthorized: false
+    }
+  });
+  return transporter;
+};
 
 const sendMail = async (participant, shard, id, owner, formData) => {
+  let transporter = await createTransporter();
   let subject = `New Key Shard - Secret Id ${id}`;
   let body = `A new key shard was shared with you by ${owner}.\n
     Details:\n
@@ -34,7 +68,7 @@ const sendMail = async (participant, shard, id, owner, formData) => {
     }
   }
   const mailOptions = {
-    from: "seshardshare@gmail.com",
+    from: process.env.EMAIL,
     to: participant,
     subject: subject,
     text: body,

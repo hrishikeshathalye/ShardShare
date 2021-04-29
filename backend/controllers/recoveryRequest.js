@@ -1,15 +1,49 @@
+require('dotenv').config()
 var jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 var recoveryRequest = require("../models/recoveryRequest.js");
 const sss = require("secrets.js-grempe");
 var Secret = require("../models/secret.js");
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: "seshardshare@gmail.com",
-    pass: "seproject123",
-  },
-});
+const { google } = require("googleapis");
+const OAuth2 = google.auth.OAuth2;
+
+const createTransporter = async () => {
+  const oauth2Client = new OAuth2(
+    process.env.CLIENT_ID,
+    process.env.CLIENT_SECRET,
+    process.env.REDIRECT_URL
+  );
+
+  oauth2Client.setCredentials({
+    refresh_token: process.env.REFRESH_TOKEN
+  });
+
+  const accessToken = await new Promise((resolve, reject) => {
+    oauth2Client.getAccessToken((err, token) => {
+      if (err) {
+        reject("Failed to create access token :(");
+      }
+      resolve(token);
+    });
+  });
+  
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      type: "OAuth2",
+      user: process.env.EMAIL,
+      accessToken,
+      clientId: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET,
+      refreshToken: process.env.REFRESH_TOKEN
+    },
+    tls: {
+      rejectUnauthorized: false
+    }
+  });
+  return transporter;
+};
 
 const setFooter = (sharedWith) => {
   let tmp = "This key was shared with : ";
@@ -23,9 +57,25 @@ const setFooter = (sharedWith) => {
   return tmp;
 };
 
-const sendMail = async (subject, body, participant) => {
+const sendMail = async (participant, shard, id, owner, formData) => {
+  let transporter = await createTransporter();
+  let subject = `New Key Shard - Secret Id ${id}`;
+  let body = `A new key shard was shared with you by ${owner}.\n
+    Details:\n
+    Shard : ${shard}\n
+    Secret Name : ${formData.secret_name}\n
+    Secret Id : ${id}\n
+    n, k : ${formData.n}, ${formData.k}\n
+    This key was shared with : `;
+  for (let i = 0; i < formData.participants.length; i++) {
+    if (i == formData.participants.length - 1) {
+      body += formData.participants[i];
+    } else {
+      body += formData.participants[i] + ", ";
+    }
+  }
   const mailOptions = {
-    from: "seshardshare@gmail.com",
+    from: process.env.EMAIL,
     to: participant,
     subject: subject,
     text: body,
@@ -33,10 +83,8 @@ const sendMail = async (subject, body, participant) => {
   return new Promise((resolve, reject) => {
     transporter.sendMail(mailOptions, function (err, data) {
       if (err) {
-        console.log("Error Occured");
         reject(0);
       } else {
-        console.log("Email sent successfully");
         resolve(1);
       }
     });
@@ -92,9 +140,6 @@ exports.approve = async (req, res) => {
     });
     const secret = await Secret.findOne({ _id: secretId });
     let numAccepted = request.approved.length;
-    // if (numAccepted >= secret.k) {
-    //   await recoveryRequest.deleteOne({ _id: request._id });
-    // }
     let subject = `Request Approved! - Secret Id ${secret._id}`;
     let footer = setFooter(secret.sharedWith);
     let body = `${approver} shared their shard with you! So far, this request has been approved by ${request.approved.length} and rejected by ${request.declined.length}\n
@@ -132,9 +177,6 @@ exports.reject = async (req, res) => {
     });
     let numRejected = request.declined.length;
     let numAccepted = request.approved.length;
-    // if (numRejected > secret.n - secret.k) {
-    //   await recoveryRequest.deleteOne({ _id: request._id });
-    // }
     res.status(200).json({ message: "Recovery Request Rejected!" });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong. Try again." });
@@ -169,28 +211,18 @@ exports.getRecoveryRequests = async (req, res) => {
     } else {
       var requester = requests[i].requester;
       tmp = { ...tmp._doc, requester };
-      // if (numAccepted >= tmp.k) {
-      //   tmp["state"] = "accepted";
-      // } else {
-      //   tmp["state"] = "pending";
-      // }
       console.log(tmp);
       secrets.push(tmp);
     }
   }
-  // console.log(secrets);
   res.status(200).json({ secret_array: secrets });
 };
 
 exports.combineShards = async (req, res) => {
   try {
-    const shardArray = req.body.shardArray;
-    // for (let i = 0; i < shardArray.length; i++) {
-    //   shardArray[i] = Buffer.from(shardArray[i], "hex");
-    // }
+    const shardArray = req.body.shardArray
     let recovered = sss.combine(shardArray);
     recovered = sss.hex2str(recovered);
-    // recovered = recovered.toString();
     res.status(200).json({ combinedSecret: recovered, message:"Recombined Successfully!"});
   } catch (error) {
     console.log(error);
