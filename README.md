@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a href="https://shardshare-frontend.herokuapp.com/"><img src="https://github.com/hrishikeshathalye/ShardShare/blob/main/frontend/public/favicon.ico" alt="ShardShare" width="200"></a>
+  <a href="https://shardshare-frontend.herokuapp.com/"><img src="https://github.com/hrishikeshathalye/ShardShare/blob/main/frontend/public/favicon.ico" alt="ShardShare"></a>
   <br>
   ShardShare
   <br>
@@ -10,7 +10,7 @@
 
 <h4 align="center">Created By <a href="https://github.com/hrishikeshathalye" target="_blank">Hrishikesh Athalye</a> & <a href="https://github.com/nachiket59" target="_blank">Nachiket Pethe</a> </h4>
 
-<b><h3 align="center">Try the project live <a href="https://shardshare-frontend.herokuapp.com/" target="_blank">here</a>.</h3></b>
+<b><h3 align="center">Try the project live <a href="https://shardshare-frontend.herokuapp.com/" target="_blank">here</a></h3></b>
 
 <p align="center">
   <a href="#about">What Is ShardShare?</a> •
@@ -67,9 +67,11 @@ Note: If you're using Linux Bash for Windows, [see this guide](https://www.howto
 
 ## Demo
 
-<iframe src="https://drive.google.com/file/d/16eZn82NZ4QU-HEv1cGP_vi2qa0ygcFYR/preview" width="640" height="480"></iframe>
+[![ShardShare](http://img.youtube.com/vi/HCbRCv0uTtw/0.jpg)](http://www.youtube.com/watch?v=HCbRCv0uTtw "ShardShare")
 
 ## Report
+
+[Final Report](https://pdfhost.io/v/u132EReWx_Final_Reportpdf.pdf)
 
 ## Credits
 
