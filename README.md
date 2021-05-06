@@ -68,7 +68,7 @@ Note: If you're using Linux Bash for Windows, [see this guide](https://www.howto
 
 ## Demo
 
-[ShardShare Demo](demo.gif)
+![ShardShare Demo](demo.gif)
 
 ## Report
 
