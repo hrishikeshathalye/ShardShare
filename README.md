@@ -14,6 +14,7 @@
 
 <p align="center">
   <a href="#about">What Is ShardShare?</a> •
+  <a href="#architecture">How It Works</a> •
   <a href="#installation">Installation</a> •
   <a href="#Demo">Demo</a> •
   <a href="#report">Final Report</a> •
@@ -26,6 +27,10 @@
 
 ShardShare is an application that uses Shamir's Secret Sharing Scheme to split a secret credential (i.e. a password, Bitcoin private key, etc) into n parts such that atleast k parts are needed to recover the secret. Each of these n parts do not make sense on their own and are "information-theoretically secure" - which means that knowing less than the requisite number of shares is the same as knowing none of the shares. This makes this technique incredibly powerful in the safeguarding of secrets.
 This is typically useful for sharing keys like cryptocurrency wallet passwords where a "reset password" feature isn't available. In recent times, many people have been locked out of their fortune due to losing passwords of such wallets. For situations like these, using something like Shamir's secret sharing is the best bet to keep the secret recoverable by decentralising it by sharing it with a number of people. It is also secure since no person who has a part of the secret actually knows the entire secret.
+
+## Architecture
+
+![Architecture](Architecture.png)
 
 ## Installation
 
