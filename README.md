@@ -18,6 +18,7 @@
   <a href="#Demo">Demo</a> •
   <a href="#report">Final Report</a> •
   <a href="#credits">Credits</a> •
+  <a href="#developers">Developers</a> •
   <a href="#license">License</a>
 </p>
 
@@ -80,6 +81,11 @@ This software uses the following open source packages:
 - [Node.js](https://nodejs.org/)
 - [React.js](https://reactjs.org/)
 - [secrets.js](https://github.com/grempe/secrets.js)
+
+## Developers
+
+- [Hrishikesh Athalye](https://github.com/hrishikeshathalye)
+- [Nachiket Pethe](https://github.com/nachiket59)
 
 ## License
 
