@@ -67,7 +67,7 @@ Note: If you're using Linux Bash for Windows, [see this guide](https://www.howto
 
 ## Demo
 
-[![ShardShare](http://img.youtube.com/vi/HCbRCv0uTtw/0.jpg)](http://www.youtube.com/watch?v=HCbRCv0uTtw "ShardShare")
+[ShardShare Demo](demo.gif)
 
 ## Report
 
